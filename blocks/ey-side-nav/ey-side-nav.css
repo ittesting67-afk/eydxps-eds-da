@@ -1,0 +1,142 @@
+/* ey-side-nav - SharePoint .eyParentMainLeftNav */
+.ey-side-nav {
+  box-sizing: border-box;
+  background: var(--ey-white, #fff);
+  padding: 0 0 20px;
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ey-text, #333);
+  word-break: break-word;
+}
+
+html body .ey-side-nav-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ey-side-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ey-side-nav li {
+  margin: 0;
+  padding: 5px 0 10px 20px;
+  list-style: none;
+}
+
+.ey-side-nav li a:any-link {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+}
+
+.ey-side-nav li a:any-link:hover {
+  text-decoration: underline;
+}
+
+/* current page: bold + underlined (desktop) */
+.ey-side-nav li.active a:any-link {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* group heading: bold 16px, 25px above the first group */
+.ey-side-nav .ey-side-nav-title {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 25px 0 10px 20px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22.8px;
+  text-align: left;
+  color: var(--ey-text, #333);
+  cursor: default;
+}
+
+.ey-side-nav .ey-side-nav-title a:any-link {
+  color: inherit;
+}
+
+.ey-side-nav .ey-side-nav-group + .ey-side-nav-group .ey-side-nav-title {
+  padding-top: 15px;
+}
+
+.ey-side-nav .ey-side-nav-group.untitled:first-child ul {
+  padding-top: 15px;
+}
+
+@media (max-width: 767px) {
+  .ey-side-nav {
+    padding: 20px;
+  }
+
+  .ey-side-nav nav {
+    border: 1px solid var(--ey-grey-300, #c0c0c0);
+  }
+
+  .ey-side-nav .ey-side-nav-group + .ey-side-nav-group {
+    border-top: 1px solid var(--ey-grey-300, #c0c0c0);
+  }
+
+  .ey-side-nav .ey-side-nav-title {
+    position: relative;
+    padding: 6px 30px 6px 10px;
+    margin: 5px 0;
+    font-size: 13.33px;
+    line-height: 19px;
+    cursor: pointer;
+  }
+
+  .ey-side-nav .ey-side-nav-title::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 10px;
+    height: 6px;
+    margin-top: -3px;
+    background: var(--ey-text, #333);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M1.2 1.2l5.8 5.6 5.8-5.6' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M1.2 1.2l5.8 5.6 5.8-5.6' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .ey-side-nav .ey-side-nav-group.open .ey-side-nav-title::after {
+    transform: rotate(180deg);
+  }
+
+  .ey-side-nav .ey-side-nav-group:not(.open) ul {
+    display: none;
+  }
+
+  .ey-side-nav .ey-side-nav-group ul {
+    background: var(--ey-grey-150, #f0f0f0);
+  }
+
+  .ey-side-nav li {
+    min-height: 38px;
+    box-sizing: border-box;
+    padding: 9px 0 0 11px;
+    border-top: 1px solid var(--ey-grey-300, #c0c0c0);
+  }
+
+  .ey-side-nav .ey-side-nav-group.untitled:first-child ul {
+    padding-top: 0;
+  }
+
+  /* current page: yellow left bar, bold, no underline */
+  .ey-side-nav li.active {
+    border-left: 4px solid var(--ey-yellow, #fee600);
+  }
+
+  .ey-side-nav li.active a:any-link {
+    text-decoration: none;
+  }
+}

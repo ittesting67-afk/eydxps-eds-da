@@ -1,0 +1,781 @@
+/* ey-tiles: see ey-tiles.js for the authoring model. Tokens come from styles/ey-theme.css (--ey-*)
+   with the SharePoint values as fallbacks so the block also works without it. */
+
+.ey-tiles {
+  --_yellow: var(--ey-yellow, #fee600);
+  --_link: var(--ey-blue, #32679b);
+  --_text: var(--ey-text, #333);
+  --_grey: var(--ey-grey-150, #f0f0f0);
+  --_panel: var(--ey-grey-50, #f8f8f8);
+  --_bold: var(--ey-font-bold, 'NotoSans-Bold', Arial, sans-serif);
+
+  position: relative;
+  margin: 15px 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--_text);
+}
+
+.ey-tiles *,
+.ey-tiles *::before,
+.ey-tiles *::after { box-sizing: border-box; }
+
+.ey-tiles ul.ey-tiles-list {
+  display: grid;
+  grid-template-columns: repeat(var(--ey-tiles-cols, 4), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ey-tiles .ey-tile {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+}
+
+.ey-tiles .ey-tile-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  cursor: default;
+}
+
+.ey-tiles a.ey-tile-face,
+.ey-tiles button.ey-tile-face { cursor: pointer; }
+
+.ey-tiles a.ey-tile-face:hover { text-decoration: none; }
+
+.ey-tiles .ey-tile-pic,
+.ey-tiles .ey-tile-pic picture { display: block; }
+
+.ey-tiles.image .ey-tile-pic picture,
+.ey-tiles.tab .ey-tile-pic picture,
+.ey-tiles.overlay .ey-tile-pic picture,
+.ey-tiles.bar .ey-tile-pic picture,
+.ey-tiles.slide .ey-tile-pic picture { height: 100%; }
+
+.ey-tiles .ey-tile-pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ey-tiles .ey-tile-desc p { margin: 0 0 10px; }
+.ey-tiles .ey-tile-desc p:last-child { margin-bottom: 0; }
+
+/* variants with their own absolute picture layer */
+.ey-tiles.image .ey-tile-pic,
+.ey-tiles.tab .ey-tile-pic,
+.ey-tiles.overlay .ey-tile-pic,
+.ey-tiles.bar .ey-tile-pic,
+.ey-tiles.slide .ey-tile-pic {
+  position: absolute;
+  inset: 0;
+}
+
+/* ------------------------------------------------------------------ cards */
+/* SharePoint: .News-section-1122 / .News-item-1122 (Home "What's New", FeaturedTopic / News view-more) */
+.ey-tiles.cards { --ey-tiles-cols: 3; margin: 10px 0; padding: 10px 0; }
+.ey-tiles.cards ul.ey-tiles-list { gap: 20px; }
+.ey-tiles.cards .ey-tile { display: flex; }
+.ey-tiles.cards .ey-tile-face {
+  display: block;
+  padding: 20px;
+  background: var(--_grey);
+  text-align: left;
+}
+
+.ey-tiles.cards .ey-tile-pic { aspect-ratio: 216 / 143; background: #ddd; }
+.ey-tiles.cards .ey-tile-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  min-height: 76px;
+  margin: 0;
+  padding: 15px 0;
+  font-family: var(--_bold);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 15.4px;
+}
+
+.ey-tiles.cards .ey-tile-label a { color: var(--_link); font-weight: 500; text-decoration: none; }
+.ey-tiles.cards .ey-tile-label a:hover { text-decoration: underline; }
+.ey-tiles.cards .ey-tile-desc { min-height: 135px; color: #2e2e38; }
+.ey-tiles.cards .ey-tile-meta { width: 85%; color: #2e2e38; }
+
+.ey-tiles .ey-tiles-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.ey-tiles .ey-tiles-more a {
+  display: inline-block;
+  margin: 4px 2px;
+  padding: 10px 18px;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ey-tiles .ey-tiles-more a:hover { background: var(--_yellow); border-color: var(--_yellow); }
+
+/* ------------------------------------------------------------------- flip */
+/* SharePoint: .flip-box > .flip-card > .flip-card-inner > .flip-card-front / .flip-card-back (Home sector tiles) */
+.ey-tiles.flip { --ey-tiles-cols: 4; background: #000; margin: 15px 0; }
+.ey-tiles.flip .ey-tiles-bg { position: absolute; inset: 0; overflow: hidden; }
+.ey-tiles.flip .ey-tiles-bg picture,
+.ey-tiles.flip .ey-tiles-bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ey-tiles.flip ul.ey-tiles-list { position: relative; }
+.ey-tiles.flip .ey-tile { height: 250px; margin: 10px; perspective: 1000px; }
+
+.ey-tiles.flip .ey-tile-face {
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 4px 8px 0;
+  background: rgba(0, 0, 0, 0.5);
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.ey-tiles.flip .ey-tile:hover .ey-tile-face,
+.ey-tiles.flip .ey-tile:focus-within .ey-tile-face { transform: rotateY(180deg); }
+
+.ey-tiles.flip .ey-tile-label,
+.ey-tiles.flip .ey-tile-desc {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.ey-tiles.flip .ey-tile-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  border: 1px solid #f6f6fa;
+  color: var(--_yellow);
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+  font-size: 18px;
+  line-height: 25.7px;
+}
+
+/* back face: heading (title) + description. The title is repeated through ::before from data-title */
+.ey-tiles.flip .ey-tile-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid var(--_yellow);
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  line-height: 17.14px;
+  transform: rotateY(180deg);
+}
+
+.ey-tiles.flip .ey-tile-desc::before {
+  content: attr(data-title);
+  margin-bottom: 15px;
+  color: var(--_yellow);
+  font-family: var(--_bold);
+  font-size: 14px;
+  line-height: 15.4px;
+}
+
+/* ---------------------------------------------------------------- buttons */
+/* SharePoint: .erf-sec > ul > li > a (grey button grid, also .tile-buttons in tiles-css-latest.css) */
+.ey-tiles.buttons { margin: 15px 0 0; }
+.ey-tiles.buttons ul.ey-tiles-list { gap: 10px; }
+.ey-tiles.buttons .ey-tile { height: 80px; }
+.ey-tiles.buttons.compact .ey-tile { height: 60px; } /* consumer-products .tile-buttons: 10px row pitch */
+.ey-tiles.buttons .ey-tile-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 10px 9px;
+  background: var(--_grey);
+  color: #000;
+  transition: background 0.5s;
+}
+
+.ey-tiles.buttons .ey-tile-face:hover,
+.ey-tiles.buttons .ey-tile-face.active,
+.ey-tiles.buttons .ey-tile-face:focus-visible {
+  background: var(--_yellow);
+  color: #000;
+  font-weight: bold;
+}
+
+/* ------------------------------------------------------------------ image */
+/* SharePoint: .img-tiles.center-bar.btn-row-3 (+ .erf-sec2) : picture with a centred label box */
+.ey-tiles.image { margin: 15px 0; }
+.ey-tiles.image ul.ey-tiles-list { display: flex; gap: 10px; }
+.ey-tiles.image .ey-tile { flex: 0 1 34%; min-height: 200px; }
+.ey-tiles.image .ey-tile-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #fff;
+}
+
+.ey-tiles.image .ey-tile-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 85%;
+  height: 50%;
+  max-height: 55%;
+  padding: 5px 11px;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: #333 0 0 15px;
+  color: #fff;
+  transition: 500ms;
+}
+
+.ey-tiles.image .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.image .ey-tile-face.active .ey-tile-label,
+.ey-tiles.image .ey-tile-face:focus-visible .ey-tile-label {
+  background: var(--_yellow);
+  color: #333;
+}
+
+/* SolutionOverview: outlined label (.img-tiles without .erf-sec2) */
+.ey-tiles.image.outlined .ey-tile-label {
+  max-width: 80%;
+  height: 100%;
+  padding: 10px 20px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.ey-tiles.image.outlined ul.ey-tiles-list { gap: 5px; }
+.ey-tiles.image.outlined .ey-tile { flex: 1 1 0; }
+
+/* -------------------------------------------------------------------- tab */
+/* SharePoint: .erf-sec.btn-row-3 a.image-tab > .over-text (ServiceLines): grey tile, picture, framed label */
+.ey-tiles.tab { margin: 0; }
+.ey-tiles.tab ul.ey-tiles-list {
+  grid-template-columns: repeat(var(--ey-tiles-cols, 4), 24%);
+  gap: 0 5px;
+  margin-bottom: 20px;
+}
+.ey-tiles.tab .ey-tile { height: 150px; margin-bottom: 10px; }
+.ey-tiles.tab .ey-tile-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 9px;
+  background: var(--_grey);
+  box-shadow: #000 0 8px 6px -6px;
+  color: #000;
+  transition: background 0.5s ease-in;
+}
+
+.ey-tiles.tab .ey-tile-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 230, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.ey-tiles.tab .ey-tile-face:hover::after,
+.ey-tiles.tab .ey-tile-face.active::after { opacity: 1; }
+
+.ey-tiles.tab .ey-tile-label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  max-width: 100%;
+  height: 55px;
+  padding: 7px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.5s ease-out;
+}
+
+.ey-tiles.tab .ey-tile-face:hover .ey-tile-label { transform: scale(1.15); }
+.ey-tiles.tab .ey-tile-face.active { background-color: rgba(255, 230, 0, 0.6); }
+.ey-tiles.tab .ey-tile-face.active .ey-tile-label { border-color: #000; background: transparent; color: #000; }
+
+/* -------------------------------------------------------------------- bar */
+/* SharePoint: .erf-sec.promoted-links li > a > img.zoom-img + .overlay-sec (picture with black caption bar) */
+.ey-tiles.bar { margin: 0 0 15px; }
+.ey-tiles.bar .ey-tile {
+  height: 150px;
+  overflow: hidden;
+  border-right: 1px solid #fff;
+}
+
+.ey-tiles.bar .ey-tile-face { position: relative; }
+.ey-tiles.bar .ey-tile-pic { bottom: 30%; }
+
+/* taller tiles (consumer-emeia-sat-big-bets: li 180px, caption 50px) */
+.ey-tiles.bar.tall .ey-tile { height: 180px; }
+.ey-tiles.bar.tall .ey-tile-pic { bottom: 50px; }
+.ey-tiles.bar.tall .ey-tile-label { top: 130px; height: 50px; padding: 10px; }
+
+.ey-tiles.bar .ey-tile-desc {
+  position: absolute;
+  top: calc(70% + 38px);
+  left: 0;
+  width: 100%;
+  padding: 0 10px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 13.2px;
+}
+
+.ey-tiles.bar .ey-tile-label {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  min-height: 54px;
+  padding: 20px 10px 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  font-family: var(--_bold);
+  font-size: 12px;
+  line-height: 13.2px;
+}
+
+.ey-tiles.bar .ey-tile-face.active .ey-tile-label,
+.ey-tiles.bar .ey-tile-face:hover .ey-tile-label {
+  background: var(--_yellow);
+  color: #000;
+}
+
+/* ------------------------------------------------------------------ slide */
+/* SharePoint: .col-md-3.strategic-sec > img + a > .overlay-sec (sector.aspx): caption slides up on hover */
+.ey-tiles.slide { margin: 0; }
+.ey-tiles.slide ul.ey-tiles-list { gap: 0 15px; }
+.ey-tiles.slide .ey-tile { height: 155px; margin-bottom: 10px; padding-top: 5px; overflow: hidden; }
+.ey-tiles.slide .ey-tile-face { position: relative; overflow: hidden; }
+
+/* yellow body panel behind the caption + description (black until hovered) */
+.ey-tiles.slide .ey-tile-face::before {
+  content: '';
+  position: absolute;
+  top: 103.5px;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: #000;
+  transition: top 1s, background-color 1s;
+}
+
+.ey-tiles.slide .ey-tile-label {
+  position: absolute;
+  top: 103.5px;
+  left: 0;
+  right: 0;
+  display: block;
+  min-height: 45.4px;
+  padding: 15px;
+  background: #000;
+  color: #fff;
+  font-family: var(--_bold);
+  font-size: 14px;
+  line-height: 15.4px;
+  transition: top 1s;
+}
+
+.ey-tiles.slide .ey-tile-desc {
+  position: absolute;
+  top: 148.9px;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  color: #000;
+  font-size: 12px;
+  line-height: 13.2px;
+  text-align: left;
+  transition: top 1s;
+}
+
+.ey-tiles.slide .ey-tile-face:hover::before,
+.ey-tiles.slide .ey-tile-face:focus-visible::before { top: 0; background: var(--_yellow); }
+
+.ey-tiles.slide .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.slide .ey-tile-face:focus-visible .ey-tile-label { top: 0; }
+
+.ey-tiles.slide .ey-tile-face:hover .ey-tile-desc,
+.ey-tiles.slide .ey-tile-face:focus-visible .ey-tile-desc { top: 45.4px; }
+
+/* ---------------------------------------------------------------- overlay */
+/* SharePoint: .tile-cont > a.width > .strategic-sec (campaigns.aspx) with sector tag h4.sector */
+.ey-tiles.overlay { margin: 0; }
+.ey-tiles.overlay ul.ey-tiles-list {
+  grid-template-columns: repeat(var(--ey-tiles-cols, 4), calc(25% - 10px));
+  gap: 10px;
+}
+.ey-tiles.overlay .ey-tile-face { position: relative; overflow: hidden; aspect-ratio: 192 / 130; }
+
+.ey-tiles.overlay .ey-tile-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-family: var(--_bold);
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+  transition: background 0.5s, color 0.5s;
+}
+
+.ey-tiles.overlay .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.overlay .ey-tile-face:focus-visible .ey-tile-label { background: #fee400; color: #000; }
+
+.ey-tiles.overlay .ey-tile-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding: 5px;
+  background: #fff;
+  color: #000;
+  font-family: var(--_bold);
+  font-size: 11px;
+  line-height: 12.1px;
+  text-align: left;
+}
+
+/* -------------------------------------------------- box / panorama (shared picture) */
+/* box: SharePoint .hbck-img > .erf-sec(-box) (GoToMarket, consumer-products, life-sciences, commercial-launch-excellence)
+   panorama: .tiles-container.flavor-panorama-tiles (retail) */
+.ey-tiles.box,
+.ey-tiles.panorama { background: #333; overflow: hidden; }
+
+.ey-tiles.box .ey-tiles-bg,
+.ey-tiles.panorama .ey-tiles-bg { position: absolute; inset: 0; }
+
+.ey-tiles.box .ey-tiles-bg picture,
+.ey-tiles.box .ey-tiles-bg img,
+.ey-tiles.panorama .ey-tiles-bg picture,
+.ey-tiles.panorama .ey-tiles-bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.ey-tiles.box { margin: 30px 0 0; }
+
+/* .hbck-img::before : light veil over the shared picture */
+.ey-tiles.box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.ey-tiles.box ul.ey-tiles-list { position: relative; display: flex; }
+.ey-tiles.box .ey-tile { flex: 1 1 0; height: 210px; }
+.ey-tiles.box .ey-tile-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 210px;
+  border-right: 1px solid #fff;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  transition: background 0.5s;
+}
+
+.ey-tiles.box .ey-tile-face:hover,
+.ey-tiles.box .ey-tile-face.active { background: rgba(255, 230, 0, 0.35); }
+.ey-tiles.box .ey-tile-label { padding: 0 7px; text-shadow: 0 0 6px rgba(0, 0, 0, 0.6); }
+
+/* box with a bottom label bar (consumer-products "Subsectors": .erf-sec-box .tile-box) */
+.ey-tiles.box.labelbar { --ey-tiles-hint: 'click to expand'; margin: 0; }
+.ey-tiles.box.labelbar .ey-tile-face {
+  align-items: flex-end;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.ey-tiles.box.labelbar .ey-tile-face:hover,
+.ey-tiles.box.labelbar .ey-tile-face.active { background: none; }
+
+.ey-tiles.box.labelbar .ey-tile-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 75px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  text-shadow: none;
+  overflow-wrap: anywhere;
+  transition: 0.5s;
+}
+
+.ey-tiles.box.labelbar .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.box.labelbar .ey-tile-face.active .ey-tile-label,
+.ey-tiles.box.labelbar .ey-tile-face:focus-visible .ey-tile-label { background: var(--_yellow); color: #000; }
+
+/* box with outlined centred label boxes + hover hint (life-sciences "Investment Priorities": .healththemebck-img .erf-sec-box) */
+.ey-tiles.box.labelbox { margin: 0; }
+.ey-tiles.box.labelbox .ey-tile,
+.ey-tiles.box.labelbox .ey-tile-face { height: 269px; }
+.ey-tiles.box.labelbox .ey-tile-face { position: relative; font-size: 14px; font-weight: 400; line-height: 20px; }
+.ey-tiles.box.labelbox .ey-tile-label {
+  width: calc(100% - 20px);
+  min-height: 60px;
+  padding: 7px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.49);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: none;
+}
+
+.ey-tiles.box.labelbox .ey-tile-face:hover,
+.ey-tiles.box.labelbox .ey-tile-face.active { background: rgba(254, 230, 0, 0.9); }
+.ey-tiles.box.labelbox .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.box.labelbox .ey-tile-face.active .ey-tile-label { color: #fff; }
+
+.ey-tiles.box.reveal .ey-tile-face:hover::after,
+.ey-tiles.box.reveal .ey-tile-face:focus-visible::after {
+  content: var(--ey-tiles-hint, 'Click here to learn more...');
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 5px 0;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+}
+
+.ey-tiles.panorama { margin: 15px 0 33.6px; }
+.ey-tiles.panorama ul.ey-tiles-list { position: relative; grid-auto-rows: 210px; }
+.ey-tiles.panorama .ey-tile { background: rgba(0, 0, 0, 0.4); }
+.ey-tiles.panorama .ey-tile-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1.33px solid #747480;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.5s;
+}
+
+.ey-tiles.panorama .ey-tile-label {
+  color: #fff;
+  font-family: var(--_bold);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 15.4px;
+  text-shadow: rgba(0, 0, 0, 0.55) 0 1px 3px;
+}
+
+.ey-tiles.panorama .ey-tile-face:hover { background: rgba(0, 0, 0, 0.6); }
+
+.ey-tiles.panorama .ey-tile-face.active {
+  border: 2px solid var(--_yellow);
+  background: color-mix(in srgb, var(--_yellow) 90%, transparent);
+}
+
+.ey-tiles.panorama .ey-tile-face.active .ey-tile-label { color: #2e2e38; text-shadow: none; }
+
+/* ----------------------------------------------------------------- panels */
+/* SharePoint: .subsec > .subsec1 / .subsec2, .subsec3 > .subsec4 (health, life-sciences sub-sectors) */
+.ey-tiles.panels { --ey-tiles-cols: 2; margin: 0 0 15px; }
+.ey-tiles.panels ul.ey-tiles-list { gap: 15px 10px; }
+.ey-tiles.panels .ey-tile-face { padding: 10px; background: var(--_panel); text-align: left; }
+.ey-tiles.panels .ey-tile-label { margin: 0; font-family: var(--_bold); font-size: 14px; font-weight: 700; line-height: 20px; }
+.ey-tiles.panels .ey-tile-label a { color: var(--_link); }
+.ey-tiles.panels .ey-tile-desc { padding-top: 15px; }
+.ey-tiles.panels .ey-tile-desc p { margin: 0 0 10px; }
+.ey-tiles.panels .ey-tile-desc ul { margin: 0 0 20px 20px; padding: 0; }
+.ey-tiles.panels .ey-tile-desc li { margin-left: 14px; padding-top: 12px; }
+.ey-tiles.panels .ey-tile-desc a { color: var(--_link); }
+
+/* ------------------------------------------------------------------ media */
+/* SharePoint: .innerlist > .list-item (DataAndInsights "Featured"): thumbnail left (col-4), heading + text right (col-8) */
+.ey-tiles.media { --ey-tiles-cols: 2; margin: 0; }
+.ey-tiles.media ul.ey-tiles-list { gap: 0; }
+.ey-tiles.media .ey-tile-face { display: flex; padding: 10px; text-align: left; }
+.ey-tiles.media .ey-tile-pic { flex: 0 0 33.333%; max-width: 33.333%; padding: 0 15px 15px 0; }
+.ey-tiles.media .ey-tile-pic img { height: auto; object-fit: contain; }
+.ey-tiles.media .ey-tile-text { flex: 1 1 0; min-width: 0; }
+.ey-tiles.media .ey-tile-label { margin: 0 0 15px; font-family: var(--_bold); font-size: 14px; font-weight: 500; line-height: 15.4px; }
+.ey-tiles.media .ey-tile-label a,
+.ey-tiles.media .ey-tile-desc a { color: var(--_link); }
+
+/* ------------------------------------------------------------ reveal panel */
+/* SharePoint: .erfsecitem (+ .erf-cnt-sec-items) / .tile-content (+ .tile-inner): content shown under the tiles */
+.ey-tiles .ey-tiles-panels { margin: 0; }
+.ey-tiles .ey-tile-panel[hidden] { display: none; }
+.ey-tiles .ey-tile-panel {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--_panel);
+}
+
+.ey-tiles .ey-tile-panel-head {
+  position: relative;
+  margin: -10px -10px 14px;
+  padding: 10px 50px 10px 10px;
+  background: #ffe400;
+  color: #444;
+}
+
+.ey-tiles .ey-tile-panel-head h4 {
+  margin: 0;
+  font-family: var(--_bold);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17.6px;
+  color: #444;
+}
+
+.ey-tiles .ey-tile-panel-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px 9px 7px;
+  border: 0;
+  border-radius: 0;
+  background: #e8e8e8;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 25.6px;
+  cursor: pointer;
+}
+
+.ey-tiles .ey-tile-panel-close:hover { background: #d0d0d0; }
+.ey-tiles .ey-tile-panel-body { padding: 10px; background: var(--_panel); }
+.ey-tiles .ey-tile-panel-body > :first-child { margin-top: 0; }
+.ey-tiles .ey-tile-panel-body > :last-child { margin-bottom: 0; }
+.ey-tiles .ey-tile-panel-body a { color: var(--_link); }
+.ey-tiles .ey-tile-panel-body p { margin: 0 0 10px; }
+.ey-tiles .ey-tile-panel-body ul,
+.ey-tiles .ey-tile-panel-body ol { margin: 0 0 20px; padding: 0; }
+.ey-tiles .ey-tile-panel-body li { margin-left: 14px; }
+
+/* light panel (tiles-css-latest.css .tile-content): white box with a yellow top bar, round close button */
+.ey-tiles.light .ey-tile-panel { position: relative; margin-top: 0; padding: 0 10px; background: #fff; }
+.ey-tiles.light .ey-tile-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--_yellow);
+}
+
+.ey-tiles.light .ey-tile-panel-head {
+  margin: 8px 0 14px;
+  padding: 10px 40px 10px 0;
+  border-bottom: 1px solid #2e2e38;
+  background: none;
+  color: #2e2e38;
+}
+
+.ey-tiles.light .ey-tile-panel-head h4 { color: #2e2e38; font-size: 16.8px; line-height: 18.48px; }
+.ey-tiles.light .ey-tile-panel-close {
+  top: 7px;
+  padding: 4px 6px 6px;
+  border-radius: 100px;
+  background: var(--_grey);
+  font-size: 20.16px;
+  line-height: 16px;
+}
+
+.ey-tiles.light .ey-tile-panel-body { padding: 0; background: #fff; }
+
+/* column overrides: ey-tiles (buttons cols-3) */
+.ey-tiles.cols-2 { --ey-tiles-cols: 2; }
+.ey-tiles.cols-3 { --ey-tiles-cols: 3; }
+.ey-tiles.cols-4 { --ey-tiles-cols: 4; }
+.ey-tiles.cols-5 { --ey-tiles-cols: 5; }
+.ey-tiles.cols-6 { --ey-tiles-cols: 6; }
+.ey-tiles.short.image .ey-tile,
+.ey-tiles.short.image .ey-tile-face { min-height: 150px; }
+
+/* --------------------------------------------------------------- responsive */
+/* Source breakpoints: bootstrap 991 / 767, erf-sec 720 / 600 (+550). Where the SharePoint web parts
+   do not reflow at all on small screens (they just get clipped) the tiles go to 2 columns / 1 column. */
+@media (max-width: 991px) {
+  /* .col-md-3.strategic-sec has no col-sm/xs class: stacks full width */
+  .ey-tiles.slide ul.ey-tiles-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  .ey-tiles.cards ul.ey-tiles-list,
+  .ey-tiles.panels ul.ey-tiles-list,
+  .ey-tiles.media ul.ey-tiles-list { grid-template-columns: 1fr; }
+
+  .ey-tiles.media .ey-tile-pic { display: none; }
+  .ey-tiles.overlay ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ey-tiles.bar ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .ey-tiles.buttons ul.ey-tiles-list { grid-template-columns: 1fr; }
+  .ey-tiles.image ul.ey-tiles-list { flex-direction: column; }
+  .ey-tiles.image .ey-tile { flex-basis: auto; width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .ey-tiles.flip ul.ey-tiles-list,
+  .ey-tiles.panorama ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .ey-tiles.box ul.ey-tiles-list { flex-wrap: wrap; }
+  .ey-tiles.box .ey-tile { flex: 0 0 50%; }
+  .ey-tiles.tab ul.ey-tiles-list { grid-template-columns: repeat(2, 49%); }
+}

@@ -1,0 +1,179 @@
+/* ey-banner - works standalone; uses var(--ey-*, fallback) so it also renders without ey-theme.css */
+.ey-banner {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--ey-banner-h, 200px);
+  overflow: hidden;
+  background: #2e2e38;
+  color: #fff;
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+}
+
+html body .ey-banner-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ey-banner .ey-banner-media,
+.ey-banner .ey-banner-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.ey-banner .ey-banner-media picture,
+.ey-banner .ey-banner-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* source: gradient rotated 180deg => dark at the top, transparent at the bottom */
+.ey-banner .ey-banner-overlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.79) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.ey-banner .ey-banner-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 23px 20px;
+}
+
+.ey-banner .ey-banner-inner {
+  box-sizing: border-box;
+  max-width: var(--ey-container, 1170px);
+  margin: 0 auto;
+  padding: 0 285px 0 15px;
+}
+
+.ey-banner .ey-banner-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 2px;
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+  font-size: var(--ey-fs-h1-banner, 35px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.1px;
+  color: #fff;
+}
+
+.ey-banner .ey-banner-title a:any-link,
+.ey-banner .ey-banner-title a:any-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* breadcrumb: SSbreadCrumb (white bold links, angle-right separators) */
+.ey-banner .ey-banner-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.ey-banner .ey-banner-crumbs li {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ey-font-bold, 'NotoSans-Bold', Arial, sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.06px;
+  color: #fff;
+}
+
+.ey-banner .ey-banner-crumbs li:not(:last-child)::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 12px;
+  margin: 0 8px 0 10px;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14'%3E%3Cpath d='M1.2 1.2l5.6 5.8-5.6 5.8' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14'%3E%3Cpath d='M1.2 1.2l5.6 5.8-5.6 5.8' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.ey-banner .ey-banner-crumbs a:any-link,
+.ey-banner .ey-banner-crumbs a:any-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.ey-banner .ey-banner-crumbs a:any-link:hover {
+  text-decoration: underline;
+}
+
+/* variant: short (no tall hero, e.g. article pages) */
+.ey-banner.short {
+  height: 124px;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .ey-banner {
+    height: 180px;
+  }
+
+  .ey-banner.short {
+    height: 124px;
+  }
+
+  .ey-banner .ey-banner-content {
+    padding: 20px 20px 20px 30px;
+  }
+
+  .ey-banner .ey-banner-inner {
+    padding-right: 15px;
+  }
+
+  .ey-banner .ey-banner-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ey-banner {
+    height: 160px;
+  }
+
+  .ey-banner.short {
+    height: 124px;
+  }
+
+  .ey-banner .ey-banner-content {
+    padding: 0 20px 29px 12px;
+  }
+
+  .ey-banner .ey-banner-inner {
+    padding: 0;
+  }
+
+  .ey-banner .ey-banner-title {
+    font-size: 18px;
+    padding-bottom: 2px;
+  }
+
+  .ey-banner .ey-banner-crumbs li {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ey-banner {
+    height: 124px;
+  }
+}

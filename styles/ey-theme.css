@@ -1,0 +1,788 @@
+/*
+ * ey-theme.css - EY Discover "Consumer & Health" (DS_CH) look and feel.
+ *
+ * Portable: no build step, no external deps. Loaded from styles/styles.css with
+ *   @import url('ey-theme.css');   <-- must be the FIRST statement of styles.css
+ * It re-declares the standard boilerplate custom properties (--background-color, --text-color,
+ * --link-color, --body-font-family, ...) with higher specificity (html:root) and styles elements
+ * with `html body ...` / `main ...` selectors so it also wins over boilerplate rules that come
+ * AFTER the @import in styles.css. See /workspace/ch-migration/blocks/_foundation.md.
+ *
+ * Source of truth: SharePoint eyHomes.min.css + computed styles of
+ * https://sites.ey.com/sites/DS_CH/Pages/*.aspx. Breakpoints of the source: 767 / 768-991 / 992-1199 / 1200+.
+ */
+
+/* ---------------------------------------------------------------- fonts */
+@font-face {
+  font-family: 'NotoSans-Regular';
+  font-style: normal;
+  font-weight: 100 500;
+  font-display: swap;
+  src: url('../fonts/ey-NotoSans-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'NotoSans-Regular';
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: swap;
+  src: url('../fonts/ey-NotoSans-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'NotoSans-Regular';
+  font-style: italic;
+  font-weight: 100 500;
+  font-display: swap;
+  src: url('../fonts/ey-NotoSans-Italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'NotoSans-Regular';
+  font-style: italic;
+  font-weight: 600 900;
+  font-display: swap;
+  src: url('../fonts/ey-NotoSans-BoldItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'NotoSans-Bold';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/ey-NotoSans-Bold.woff') format('woff');
+}
+
+/* ---------------------------------------------------------------- tokens */
+:root {
+  /* brand */
+  --ey-yellow: #fee600;
+  --ey-blue: #32679b;
+  --ey-blue-dark: #254d75;
+  --ey-text: #333;
+  --ey-text-muted: #646464;
+  --ey-bg: #eee;
+  --ey-white: #fff;
+  --ey-black: #000;
+
+  /* greys (all verified from SharePoint computed styles) */
+  --ey-grey-50: #f8f8f8; /* tile buttons, sub-sector boxes */
+  --ey-grey-100: #f5f5f5; /* selected tab background */
+  --ey-grey-150: #f0f0f0; /* mobile side-nav items */
+  --ey-grey-200: #ddd; /* footer top border */
+  --ey-grey-250: #d0d0d0; /* button borders */
+  --ey-grey-300: #c0c0c0; /* heading rule, mobile nav borders */
+  --ey-grey-400: #acacac; /* footer links */
+  --ey-grey-500: #b3b3b3; /* footer subtitle */
+  --ey-grey-900: #333; /* footer band */
+  --ey-dark: #2e2e38; /* EY dark (Discover header colour) */
+
+  /* typography */
+  --ey-font: 'NotoSans-Regular', Arial, sans-serif;
+  --ey-font-bold: 'NotoSans-Bold', Arial, sans-serif;
+  --ey-fs-base: 14px;
+  --ey-lh-base: 20px;
+  --ey-fs-h1: 28px; /* article title; banner h1 is 35px */
+  --ey-fs-h1-banner: 35px;
+  --ey-fs-h2: 28px; /* card titles: SharePoint renders them as 28px h1 */
+  --ey-fs-h3: 18px;
+  --ey-fs-h4: 16px;
+
+  /* layout */
+  --ey-container: 1170px;
+  --ey-gutter: 15px;
+  --ey-card-pad: 20px;
+  --ey-gap: 20px; /* vertical gap between cards */
+  --ey-side-w: calc((100% + 30px) / 4 - 30px); /* bootstrap col-md-3 minus gutters */
+  --ey-banner-h: 200px;
+  --ey-tabbar-h: 44px;
+
+  /* icons (mask images; colour with background-color/currentColor) */
+  --ey-icon-angle-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14'%3E%3Cpath d='M1.2 1.2l5.6 5.8-5.6 5.8' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E");
+  --ey-icon-angle-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 8'%3E%3Cpath d='M1.2 1.2l5.8 5.6 5.8-5.6' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E");
+  --ey-icon-home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M8 0L0 7h2.2v7h4.2V9h3.2v5h4.2V7H16z' fill='%23000'/%3E%3C/svg%3E");
+  --ey-icon-mail: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 1h14v10H1zM1.5 1.8L8 7l6.5-5.2' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E");
+  --ey-icon-lifebuoy: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.6' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3Ccircle cx='8' cy='8' r='2.6' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3Cpath d='M3.4 3.4l2.9 2.9M12.6 3.4L9.7 6.3M3.4 12.6l2.9-2.9M12.6 12.6L9.7 9.7' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E");
+  --ey-icon-edit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M12 9.5V14H2V4h4.5M6 10l.5-2.5L13 1l2 2-6.5 6.5z' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E");
+}
+
+/* Re-declare the standard EDS boilerplate (and Guides) variables so any block/boilerplate rule that
+   reads them picks up the EY look. html:root beats the boilerplate's plain :root. */
+html:root {
+  --background-color: var(--ey-bg);
+  --light-color: var(--ey-grey-50);
+  --dark-color: var(--ey-grey-900);
+  --text-color: var(--ey-text);
+  --link-color: var(--ey-blue);
+  --link-hover-color: var(--ey-blue);
+  --overlay-background-color: var(--ey-grey-50);
+  --highlight-background-color: var(--ey-grey-100);
+  --body-font-family: var(--ey-font);
+  --heading-font-family: var(--ey-font);
+  --fixed-font-family: Menlo, Consolas, 'Liberation Mono', monospace;
+  --body-font-size-m: var(--ey-fs-base);
+  --body-font-size-s: var(--ey-fs-base);
+  --body-font-size-xs: var(--ey-fs-base);
+  --body-font-size-xxs: 12px;
+  --heading-font-size-xxl: var(--ey-fs-h1);
+  --heading-font-size-xl: var(--ey-fs-h2);
+  --heading-font-size-l: var(--ey-fs-h3);
+  --heading-font-size-m: var(--ey-fs-h4);
+  --heading-font-size-s: var(--ey-fs-base);
+  --heading-font-size-xs: var(--ey-fs-base);
+  --nav-height: auto;
+  --header-bg-color: transparent;
+}
+
+/* ---------------------------------------------------------------- page frame */
+html body {
+  margin: 0;
+  font-family: var(--ey-font);
+  font-size: var(--ey-fs-base);
+  line-height: 1.42857;
+  color: var(--ey-text);
+  background-color: var(--ey-bg);
+  overflow-x: hidden;
+}
+
+/* undo Guides/boilerplate "app shell" layouts (flex body, hidden scroll, fixed heights) */
+html body.appear {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+  overflow-x: hidden;
+}
+
+html body header {
+  display: block;
+  height: auto;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+html body main {
+  display: block;
+  flex: 1 0 auto;
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0 0 var(--ey-gap);
+}
+
+/* container: 1170 (>=1200), 970 (992-1199), 750 (768-991), fluid + bleeding cards (<768) */
+@media (min-width: 768px) {
+  html body main {
+    width: 750px;
+    max-width: 100%;
+    padding-left: var(--ey-gutter);
+    padding-right: var(--ey-gutter);
+    box-sizing: border-box;
+    width: 750px;
+    --ey-side-w: calc((100% + 30px) / 3 - 30px); /* col-sm-4 */
+  }
+}
+
+@media (min-width: 992px) {
+  html body main {
+    width: 970px;
+    --ey-side-w: calc((100% + 30px) / 4 - 30px); /* col-md-3 */
+  }
+}
+
+@media (min-width: 1200px) {
+  html body main {
+    width: var(--ey-container);
+  }
+}
+
+/* sections: boilerplate/Guides wrapper rules neutralised, EY card model applied */
+html body main > .section,
+html body main .section {
+  box-sizing: border-box;
+  max-width: none;
+  margin: var(--ey-gap) 0 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  clear: both;
+}
+
+html body main .section:empty {
+  display: none;
+}
+
+html body main .section > div {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---------------------------------------------------------------- section styles (section-metadata "style") */
+
+/* white content card (the SharePoint .eyMainSection) */
+html body main .section.ey-white {
+  background: var(--ey-white);
+  padding: var(--ey-card-pad);
+}
+
+/* light grey inset box (sub-sector boxes, tile backgrounds) */
+html body main .section.ey-grey {
+  background: var(--ey-grey-50);
+  padding: var(--ey-card-pad);
+}
+
+/* dark band: white text on EY dark */
+html body main .section.ey-dark {
+  background: var(--ey-dark);
+  color: var(--ey-white);
+  padding: var(--ey-card-pad);
+}
+
+html body main .section.ey-dark a:any-link,
+html body main .section.ey-dark h1,
+html body main .section.ey-dark h2,
+html body main .section.ey-dark h3,
+html body main .section.ey-dark h4 {
+  color: var(--ey-white);
+}
+
+html body main .section.ey-dark h3 {
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+}
+
+/* EY yellow highlight band */
+html body main .section.ey-yellow {
+  background: var(--ey-yellow);
+  color: var(--ey-text);
+  padding: var(--ey-card-pad);
+}
+
+html body main .section.ey-yellow a:any-link {
+  color: var(--ey-text);
+  text-decoration: underline;
+}
+
+/* plain: explicit "no card" (this is also the default); resets padding when combined */
+html body main .section.ey-plain {
+  background: transparent;
+  padding: 0;
+}
+
+/* no card padding - for full-bleed image strips and tile grids inside a white card */
+html body main .section.ey-flush {
+  padding: 0;
+}
+
+/* narrow reading column inside the container */
+html body main .section.ey-narrow {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* stick to the previous section (no vertical gap) */
+html body main .section.ey-tight {
+  margin-top: 0;
+}
+
+html body main .section.ey-center {
+  text-align: center;
+}
+
+/* ---- two-column page layouts (bootstrap col-3 / col-9) ----
+   ey-side  : section on the LEFT  (ey-side-nav block), content flows in the right column
+   ey-aside : section on the RIGHT (home page promo tiles), content flows in the left column */
+@media (min-width: 768px) {
+  html body main:has(> .section.ey-side),
+  html body main:has(> .section.ey-aside) {
+    display: grid;
+    column-gap: 30px;
+    align-content: start;
+  }
+
+  html body main:has(> .section.ey-side) {
+    grid-template-columns: var(--ey-side-w) minmax(0, 1fr);
+  }
+
+  html body main:has(> .section.ey-aside) {
+    grid-template-columns: minmax(0, 1fr) var(--ey-side-w);
+  }
+
+  html body main:has(> .section.ey-side) > .section:not(.ey-side) {
+    grid-column: 2;
+  }
+
+  html body main:has(> .section.ey-aside) > .section:not(.ey-aside) {
+    grid-column: 1;
+  }
+
+  html body main > .section.ey-side {
+    grid-column: 1;
+    grid-row: 1 / span 40;
+    align-self: start;
+  }
+
+  html body main > .section.ey-aside {
+    grid-column: 2;
+    grid-row: 1 / span 40;
+    align-self: start;
+  }
+}
+
+/* mobile: cards bleed to the viewport edge, 20px apart (source: .eyMainSection width 100%) */
+@media (max-width: 767px) {
+  html body main > .section.ey-narrow {
+    max-width: none;
+  }
+}
+
+/* ---------------------------------------------------------------- default content typography */
+html body main h1,
+html body main h2,
+html body main h3,
+html body main h4,
+html body main h5,
+html body main h6 {
+  font-family: var(--ey-font);
+  font-weight: 500;
+  color: var(--ey-text);
+  letter-spacing: 0.1px;
+  line-height: 1.1;
+  margin: 0 0 25px;
+}
+
+html body main h1 {
+  font-size: var(--ey-fs-h1);
+}
+
+html body main h2 {
+  font-size: var(--ey-fs-h2);
+}
+
+html body main h3,
+html body main h4,
+html body main h5,
+html body main h6 {
+  font-family: var(--ey-font-bold);
+  font-size: var(--ey-fs-h3);
+  line-height: 1.1;
+  margin: 20px 0 10px;
+  letter-spacing: 0;
+}
+
+html body main h4 {
+  font-size: var(--ey-fs-h4);
+}
+
+html body main h5,
+html body main h6 {
+  font-size: var(--ey-fs-base);
+}
+
+/* first heading of a card: no top spacing */
+html body main .section > div > :first-child:is(h1, h2, h3, h4, h5, h6) {
+  margin-top: 0;
+}
+
+/* SharePoint "h3 + rule": 18px bold heading with a grey rule below (h3 + hr.lessMargin) */
+html body main .default-content-wrapper > h3,
+html body main .section > div > h3 {
+  padding-top: 15px;
+  padding-bottom: 6px;
+  margin: 0 0 15px;
+  border-bottom: 2px solid var(--ey-grey-300);
+}
+
+html body main .default-content-wrapper > h3:first-child,
+html body main .section > div > h3:first-child {
+  padding-top: 0;
+}
+
+html body main h3 + hr {
+  display: none;
+}
+
+html body main p,
+html body main dl,
+html body main ol,
+html body main ul,
+html body main pre,
+html body main blockquote {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+html body main ul,
+html body main ol {
+  padding-left: 20px;
+}
+
+html body main ul {
+  list-style: disc;
+}
+
+html body main ol {
+  list-style: decimal;
+}
+
+html body main li {
+  line-height: var(--ey-lh-base);
+}
+
+html body main li + li {
+  margin-top: 4px;
+}
+
+html body main hr {
+  border: 0;
+  border-top: 2px solid var(--ey-grey-300);
+  margin: 6px 0 15px;
+  height: 0;
+  overflow: visible;
+}
+
+html body main strong,
+html body main b {
+  font-weight: 700;
+}
+
+html body main blockquote {
+  font-style: normal;
+  margin: 0 0 10px;
+  padding: 0 0 0 15px;
+  text-indent: 0;
+  border-left: 4px solid var(--ey-yellow);
+}
+
+html body main blockquote p::before,
+html body main blockquote p::after {
+  content: none;
+}
+
+html body main img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* links */
+html body a:any-link {
+  color: var(--ey-blue);
+  text-decoration: none;
+}
+
+html body a:any-link:hover {
+  color: var(--ey-blue);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------- buttons */
+/* EDS decorateButtons: **link** -> a.button(.primary), _link_ -> a.button.secondary. Also usable as <a class="button"> */
+html body main a.button:any-link,
+html body main button.button {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 4px 2px;
+  padding: 10px 18px;
+  font-family: var(--ey-font);
+  font-size: var(--ey-fs-base);
+  line-height: 20px;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  cursor: pointer;
+  color: var(--ey-text);
+  background-color: var(--ey-white);
+  border: 1px solid var(--ey-grey-250);
+  border-radius: 2px;
+}
+
+html body main a.button:any-link:hover,
+html body main button.button:hover {
+  background-color: var(--ey-white);
+  border-color: var(--ey-grey-150);
+  color: #808080;
+  text-decoration: none;
+}
+
+/* default (non-primary) button = SharePoint "VIEW MORE" button */
+html body main a.button:any-link:not(.primary):not(.secondary) {
+  text-transform: uppercase;
+}
+
+html body main a.button.primary:any-link {
+  background-color: var(--ey-yellow);
+  border-color: var(--ey-yellow);
+  color: var(--ey-dark);
+  font-weight: 700;
+}
+
+html body main a.button.primary:any-link:hover {
+  background-color: #ffee33;
+  border-color: #ffee33;
+  color: var(--ey-dark);
+}
+
+html body main a.button.secondary:any-link {
+  background-color: var(--ey-white);
+  border: 1px solid var(--ey-grey-250);
+  color: var(--ey-text);
+}
+
+html body main p.button-container,
+html body main .button-container {
+  margin: 0 0 10px;
+}
+
+/* "Suggest an edit to this content" style outline button (full width in side column) */
+html body main a.button.ey-wide:any-link {
+  display: block;
+  width: 100%;
+  color: var(--ey-blue);
+}
+
+/* ---------------------------------------------------------------- icons (EDS :name: tokens) */
+html body .icon {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: -0.125em;
+}
+
+html body .icon svg {
+  height: 100%;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------- tables (standard EDS table block, SharePoint look) */
+html body main table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: var(--ey-fs-base);
+}
+
+html body main th,
+html body main td {
+  padding: 8px 10px;
+  border: 1px solid var(--ey-grey-250);
+  text-align: left;
+  vertical-align: top;
+}
+
+html body main th {
+  background: var(--ey-grey-50);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- footer (fragment /ds_ch/footer)
+   Authoring: section 1 = band (logo, DISCOVER / Powered by, Support + Send feedback links),
+   section 2 = legal text. Matches SharePoint footer.panel-footer + .footerDisclaimer. */
+html body footer {
+  display: block;
+  width: 100%;
+  margin: 80px 0 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ey-text);
+  font-family: var(--ey-font);
+  font-size: var(--ey-fs-base);
+  line-height: var(--ey-lh-base);
+}
+
+html body footer > div,
+html body footer .footer {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+}
+
+html body footer .section {
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0;
+  max-width: none;
+  width: auto;
+}
+
+html body footer .section > div {
+  box-sizing: border-box;
+  max-width: var(--ey-container);
+  margin: 0 auto;
+  padding: 0 var(--ey-gutter);
+}
+
+/* band */
+html body footer .section:first-of-type {
+  background: var(--ey-grey-900);
+  border-top: 1px solid var(--ey-grey-200);
+  padding: 15.5px 0;
+}
+
+html body footer .section:first-of-type .default-content-wrapper {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  grid-template-areas: 'logo title links';
+  column-gap: 0;
+  align-items: start;
+  height: 60px;
+}
+
+html body footer .section:first-of-type p {
+  margin: 0;
+  color: var(--ey-white);
+  font-size: 14px;
+  line-height: 16px;
+}
+
+html body footer .section:first-of-type p:first-child {
+  grid-area: logo;
+}
+
+html body footer .section:first-of-type p:first-child img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  max-width: none;
+}
+
+html body footer .section:first-of-type p:nth-child(2) {
+  grid-area: title;
+  padding-top: 25px;
+  line-height: 16px;
+}
+
+html body footer .section:first-of-type p:nth-child(2) strong {
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+html body footer .section:first-of-type p:nth-child(2) em {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 17px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ey-grey-500);
+}
+
+html body footer .section:first-of-type p:nth-child(3) {
+  grid-area: links;
+  display: flex;
+  gap: 20px;
+  margin-top: -2px;
+  line-height: 47px;
+  text-align: right;
+}
+
+html body footer .section:first-of-type a:any-link {
+  position: relative;
+  padding-left: 19px;
+  font-family: var(--ey-font-bold);
+  font-size: 12px;
+  line-height: 47px;
+  text-transform: uppercase;
+  color: var(--ey-grey-400);
+  white-space: nowrap;
+}
+
+html body footer .section:first-of-type a:any-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  background-color: var(--ey-grey-400);
+  -webkit-mask: var(--ey-icon-lifebuoy) center / contain no-repeat;
+  mask: var(--ey-icon-lifebuoy) center / contain no-repeat;
+}
+
+html body footer .section:first-of-type a[href^='mailto:']::before {
+  -webkit-mask-image: var(--ey-icon-mail);
+  mask-image: var(--ey-icon-mail);
+}
+
+/* legal text */
+html body footer .section:nth-of-type(2) {
+  background: transparent;
+}
+
+html body footer .section:nth-of-type(2) p {
+  margin: 10px 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ey-text);
+}
+
+html body footer .section:nth-of-type(2) a:any-link {
+  text-decoration: underline;
+}
+
+html body footer .section .metadata {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- responsive tuning */
+@media (max-width: 767px) {
+  html body {
+    --ey-fs-h1: 18px;
+    --ey-fs-h2: 18px;
+    --ey-fs-h3: 14px;
+    --ey-fs-h4: 14px;
+    --ey-card-pad: 20px;
+  }
+
+  html body footer {
+    margin-top: 40px;
+  }
+
+  html body footer .section:first-of-type .default-content-wrapper {
+    grid-template-columns: 44px 1fr;
+    grid-template-areas: 'logo title' 'links links';
+    height: auto;
+  }
+
+  html body footer .section:first-of-type p:first-child {
+    display: block;
+  }
+
+  html body footer .section:first-of-type p:nth-child(3) {
+    justify-content: flex-start;
+    line-height: 30px;
+  }
+
+  html body footer .section:first-of-type a:any-link {
+    line-height: 30px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body {
+    --ey-fs-h1: 24px;
+  }
+}
+
+html body footer .section:has(> div > .metadata) {
+  display: none;
+}
+
+/* page metadata block (rendered only by tooling that does not strip it) */
+html body main .metadata,
+html body main .section:has(> div > .metadata:only-child) {
+  display: none;
+}
