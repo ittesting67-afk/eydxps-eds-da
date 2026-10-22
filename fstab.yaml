@@ -1,0 +1,5 @@
+mountpoints:
+  /:
+    url: https://guides.adobe.com/eds-workers/your-user-name/your-repo-name/main/docs
+    type: markup
+
