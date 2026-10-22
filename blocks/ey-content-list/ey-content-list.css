@@ -1,0 +1,543 @@
+/*
+ * ey-content-list - works standalone (var(--ey-*, fallback)); see ey-content-list.md spec.
+ * Source parity: SharePoint "Whats New" script CSS (ds-news-script.js), .eyMainSection-* announcement
+ * tiles (eyHomes.min.css) and the .Events calendar list. Breakpoints 767 / 768-1199 / 1200+.
+ */
+.ey-content-list {
+  box-sizing: border-box;
+  color: var(--ey-text, #333);
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+  font-size: var(--ey-fs-base, 14px);
+  line-height: var(--ey-lh-base, 20px);
+}
+
+.ey-content-list *,
+.ey-content-list *::before,
+.ey-content-list *::after {
+  box-sizing: border-box;
+}
+
+.ey-content-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ey-content-list li {
+  margin: 0;
+  padding: 0;
+}
+
+.ey-content-list .ey-cl-title {
+  margin: 0;
+  font-family: var(--ey-font-bold, 'NotoSans-Bold', Arial, sans-serif);
+  font-weight: 500;
+  color: var(--ey-blue, #32679b);
+}
+
+.ey-content-list .ey-cl-title a:any-link,
+.ey-content-list .ey-cl-title {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+}
+
+.ey-content-list .ey-cl-title a:hover {
+  text-decoration: underline;
+}
+
+.ey-content-list .ey-cl-img picture,
+.ey-content-list .ey-cl-img img {
+  display: block;
+  width: 100%;
+}
+
+.ey-content-list .ey-cl-img img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.ey-content-list .ey-cl-desc {
+  margin: 0;
+  overflow: hidden;
+}
+
+/* block header (optional title row + events "See past events" link) */
+.ey-content-list .ey-cl-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.ey-content-list .ey-cl-block-head > :is(h1, h2, h3, h4) {
+  margin: 0;
+}
+
+.ey-content-list .ey-cl-top-link:any-link {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ey-content-list .ey-cl-top-link:hover {
+  text-decoration: underline;
+}
+
+.ey-content-list .ey-cl-icon-history {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  background: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8a5 5 0 1 1 1.6 3.7' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3Cpath d='M0.5 6.5L3 9.2 5.6 6.5z' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* "VIEW MORE" button (source: .ViewMoreNewbutton1130 / .ey-smallLablebtn) */
+.ey-content-list .ey-cl-more:any-link {
+  display: block;
+  width: fit-content;
+  margin: 40px auto 0;
+  padding: 10px 18px;
+  background: var(--ey-white, #fff);
+  border: 1px solid var(--ey-grey-250, #d0d0d0);
+  border-radius: 2px;
+  color: var(--ey-text, #333);
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ey-content-list .ey-cl-more:hover {
+  color: #808080;
+  border-color: #f0f0f0;
+}
+
+/* ================================================================= cards
+ * News / Whats New on the home page: 3 grey cards (ds-news-script.js) */
+.ey-content-list.cards .ey-cl-list {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.ey-content-list.cards .ey-cl-item {
+  display: block;
+  flex: 0 1 calc((100% - 40px) / 3);
+  min-width: 0;
+  padding: 20px;
+  background: var(--ey-grey-150, #f0f0f0);
+  color: #2e2e38;
+}
+
+.ey-content-list.cards .ey-cl-img,
+.ey-content-list.cards .ey-cl-img picture,
+.ey-content-list.cards .ey-cl-img img {
+  height: 143px;
+}
+
+.ey-content-list.cards .ey-cl-title {
+  display: -webkit-box;
+  min-height: 76px;
+  padding: 15px 0;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 15.4px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.ey-content-list.cards .ey-cl-desc {
+  min-height: 135px;
+  color: #2e2e38;
+}
+
+.ey-content-list.cards .ey-cl-date {
+  color: #2e2e38;
+}
+
+@media (max-width: 767px) {
+  /* source overflows the viewport here; scroll-snap row is the controlled equivalent */
+  .ey-content-list.cards .ey-cl-list {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ey-content-list.cards .ey-cl-item {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+}
+
+/* ================================================================= tiles
+ * Announcement tiles (.eyMainSection-section), 3 per row, image on top */
+.ey-content-list.tiles .ey-cl-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 30px;
+}
+
+.ey-content-list.tiles .ey-cl-item {
+  margin-bottom: 20px;
+}
+
+.ey-content-list.tiles .ey-cl-img {
+  height: 160px;
+  overflow: hidden;
+}
+
+.ey-content-list.tiles .ey-cl-title {
+  display: -webkit-box;
+  height: 37px;
+  margin: 8px 0 10px;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 18px;
+  -webkit-box-orient: vertical;
+}
+
+.ey-content-list.tiles .ey-cl-date {
+  padding-bottom: 3px;
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--ey-text-muted, #646464);
+}
+
+.ey-content-list.tiles .ey-cl-desc {
+  height: 60px;
+  margin: 20px 0 0;
+}
+
+.ey-content-list.tiles .ey-cl-rule,
+.ey-content-list .ey-cl-rule {
+  height: 1px;
+  margin: 10px 0 20px;
+  border: solid var(--ey-grey-300, #c0c0c0);
+  border-width: 1px 0;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .ey-content-list.tiles .ey-cl-img {
+    height: 140px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ey-content-list.tiles .ey-cl-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* source: .hidden-xs on .announcementImg */
+  .ey-content-list.tiles:not(.mobile-image) .ey-cl-img,
+  .ey-content-list.rail:not(.mobile-image) .ey-cl-img {
+    display: none;
+  }
+
+  .ey-content-list.tiles .ey-cl-desc {
+    height: auto;
+    max-height: 60px;
+  }
+}
+
+/* ================================================================= rail
+ * Right-hand rail panel: white cards stacked with a 20px gap. */
+.ey-content-list.rail .ey-cl-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.ey-content-list.rail .ey-cl-item {
+  background: var(--ey-white, #fff);
+}
+
+.ey-content-list.rail .ey-cl-img {
+  height: 160px;
+  overflow: hidden;
+}
+
+.ey-content-list.rail .ey-cl-body {
+  padding: 10px 10px 15px;
+}
+
+.ey-content-list.rail .ey-cl-top {
+  display: flex;
+  min-height: 30px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.ey-content-list.rail .ey-cl-tag {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.ey-content-list.rail .ey-cl-viewall:any-link {
+  color: var(--ey-blue, #32679b);
+  font-size: 11px;
+  line-height: 17px;
+  text-decoration: none;
+  text-transform: lowercase;
+}
+
+.ey-content-list.rail .ey-cl-viewall::first-letter {
+  text-transform: uppercase;
+}
+
+.ey-content-list.rail .ey-cl-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 15.4px;
+}
+
+.ey-content-list.rail .ey-cl-desc {
+  height: 60px;
+  margin: 0;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* rail drops under the main column and the 3 cards sit side by side */
+  .ey-content-list.rail .ey-cl-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ey-content-list.rail .ey-cl-img {
+    height: 140px;
+  }
+}
+
+/* ================================================================= rows
+ * NewsViewMore / FeaturedTopicViewMore: thumbnail left, title + date, description, rule */
+.ey-content-list.rows .ey-cl-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 0 25px;
+  margin-bottom: 20px;
+  border-bottom: 3px double var(--ey-grey-300, #c0c0c0);
+}
+
+.ey-content-list.rows .ey-cl-img {
+  flex: 0 0 130px;
+  padding-right: 10px;
+}
+
+.ey-content-list.rows .ey-cl-img picture,
+.ey-content-list.rows .ey-cl-img img {
+  height: auto;
+}
+
+.ey-content-list.rows .ey-cl-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #2e2e38;
+}
+
+.ey-content-list.rows .ey-cl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ey-content-list.rows .ey-cl-title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 21px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.ey-content-list.rows .ey-cl-date {
+  flex: 0 0 auto;
+  color: #2e2e38;
+}
+
+.ey-content-list.rows .ey-cl-desc {
+  color: #2e2e38;
+}
+
+@media (max-width: 991px) {
+  .ey-content-list.rows .ey-cl-item {
+    display: block;
+  }
+
+  .ey-content-list.rows .ey-cl-img {
+    padding: 0 0 10px;
+  }
+}
+
+/* pagination: "Displaying items 1 - 10 of 45  >" */
+.ey-content-list .ey-cl-pager {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.ey-content-list .ey-cl-page {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0 0 0 10px;
+  padding: 0;
+  vertical-align: middle;
+  background: var(--ey-text, #333);
+  border: 0;
+  cursor: pointer;
+  mask: var(--ey-icon-angle-right, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 14'%3E%3Cpath d='M1.2 1.2l5.6 5.8-5.6 5.8' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E")) center / 8px 14px no-repeat;
+}
+
+.ey-content-list .ey-cl-page.ey-cl-prev {
+  margin: 0 10px 0 0;
+  transform: scaleX(-1);
+}
+
+.ey-content-list .ey-cl-page:hover {
+  background: #03787c;
+}
+
+/* ================================================================ events */
+.ey-content-list.events .ey-cl-group {
+  margin: 0 0 25px;
+  font-family: var(--ey-font-bold, 'NotoSans-Bold', Arial, sans-serif);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.ey-content-list.events .ey-cl-item {
+  position: relative;
+  min-height: 62px;
+  padding: 20px 0 0 65px;
+}
+
+.ey-content-list.events .ey-cl-item:first-child {
+  padding-top: 0;
+}
+
+.ey-content-list.events .ey-cl-list + .ey-cl-group {
+  margin-top: 25px;
+}
+
+.ey-content-list.events .ey-cl-calendar {
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
+.ey-content-list.events .ey-cl-item:first-child .ey-cl-calendar {
+  top: 0;
+}
+
+.ey-content-list .ey-cl-calendar {
+  width: 45px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ey-content-list .ey-cl-cal-month {
+  padding: 2px 0;
+  background: #00a3ae;
+  color: #fff;
+  font-size: 10px;
+  line-height: 14.3px;
+}
+
+.ey-content-list .ey-cl-cal-day {
+  padding: 4px 0;
+  background: #c0c0c0;
+  color: #333;
+  font-size: 13px;
+  line-height: 18.6px;
+}
+
+.ey-content-list.events .ey-cl-title {
+  margin: 0 0 7px;
+  font-size: 16px;
+  line-height: 17.6px;
+}
+
+.ey-content-list.events .ey-cl-time a:any-link {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+}
+
+.ey-content-list.events .ey-cl-desc {
+  display: -webkit-box;
+  height: 37px;
+  margin: 10px 0 10px 2px;
+  line-height: 18px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ey-content-list.events.compact .ey-cl-desc {
+  display: none;
+}
+
+/* event detail meta (calendar + date/time + add to calendar) */
+.ey-content-list.meta .ey-cl-meta {
+  display: flow-root;
+  padding-top: 20px;
+  color: var(--ey-blue, #32679b);
+  font-weight: 700;
+}
+
+.ey-content-list.meta .ey-cl-calendar {
+  float: left;
+  margin-right: 10px;
+}
+
+.ey-content-list.meta .ey-cl-meta-text {
+  display: block;
+  max-height: 60px;
+  overflow: hidden;
+}
+
+.ey-content-list.meta .ey-cl-addcal {
+  clear: both;
+  padding-top: 20px;
+  font-weight: 400;
+}
+
+.ey-content-list.meta .ey-cl-addcal a:any-link {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+}
+
+.ey-content-list.meta .ey-cl-addcal span {
+  padding-left: 10px;
+}
+
+.ey-content-list .ey-cl-icon-cal {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  background: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 3h12v11H2zM2 6.5h12M5 1v4M11 1v4M8 8v4M6 10h4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* source: add-to-calendar is visible-lg only */
+@media (max-width: 1199px) {
+  .ey-content-list.meta .ey-cl-addcal {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .ey-content-list .ey-cl-block-head {
+    flex-wrap: wrap;
+  }
+}
+
+/* variant `hide-empty`: collapse when the sheet/filter yields no items (e.g. home "Upcoming Events" box) */
+.ey-content-list.hide-empty.ey-cl-empty {
+  display: none;
+}

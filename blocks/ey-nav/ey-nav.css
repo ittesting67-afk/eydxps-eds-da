@@ -1,0 +1,110 @@
+/* ey-nav - SharePoint eySecNav tab bar */
+html body .ey-nav-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ey-nav {
+  background: #fff;
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+}
+
+.ey-nav .ey-nav-bar > ul {
+  display: flex;
+  box-sizing: border-box;
+  max-width: var(--ey-container, 1170px);
+  margin: 0 auto;
+  padding: 0 15px;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.ey-nav .ey-nav-bar > ul::-webkit-scrollbar {
+  display: none;
+}
+
+.ey-nav .ey-nav-bar li {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--ey-tabbar-h, 44px);
+  margin: 0;
+  padding: 0 20px;
+  list-style: none;
+  border-bottom: 3px solid transparent;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ey-nav .ey-nav-bar li:hover {
+  background: #f5f5f5;
+}
+
+.ey-nav .ey-nav-bar li.active {
+  background: #f5f5f5;
+  border-bottom-color: #fee600;
+}
+
+.ey-nav .ey-nav-bar a:any-link,
+.ey-nav .ey-nav-bar a:any-link:hover {
+  color: #333;
+  font-size: 13px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.ey-nav .ey-nav-bar li.active a:any-link {
+  font-weight: 700;
+}
+
+/* Home tab: house icon instead of text */
+.ey-nav .ey-nav-bar li.ey-nav-home {
+  padding: 0 20px;
+}
+
+.ey-nav .ey-nav-bar li.ey-nav-home a:any-link {
+  display: block;
+  width: 17px;
+  height: 14px;
+  overflow: hidden;
+  font-size: 0;
+  text-indent: -9999px;
+  background: #000;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M8 0L0 7h2.2v7h4.2V9h3.2v5h4.2V7H16z' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M8 0L0 7h2.2v7h4.2V9h3.2v5h4.2V7H16z' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .ey-nav .ey-nav-bar li {
+    padding: 0 8px;
+  }
+
+  .ey-nav .ey-nav-bar li.ey-nav-home {
+    padding: 0 10px;
+  }
+
+  .ey-nav .ey-nav-bar li,
+  .ey-nav .ey-nav-bar a:any-link {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ey-nav .ey-nav-bar > ul {
+    padding: 0;
+  }
+
+  .ey-nav .ey-nav-bar li {
+    padding: 0 15px;
+  }
+
+  .ey-nav .ey-nav-bar li.ey-nav-home {
+    padding: 0 10px;
+  }
+}

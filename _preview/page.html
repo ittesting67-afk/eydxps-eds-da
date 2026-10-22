@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EDS block preview harness</title>
+<link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+<header></header>
+<main></main>
+<footer></footer>
+<script type="module">
+// Local preview harness: loads DA page HTML from /_preview/content/<path>.html, applies the
+// standard EDS decoration (aem.js), loads block JS/CSS from this repo. Usage: page.html?path=/ds_ch/index
+import {
+  decorateSections, decorateBlocks, decorateIcons, loadBlocks, loadCSS, decorateTemplateAndTheme, decorateButtons,
+} from '/scripts/aem.js';
+
+const params = new URLSearchParams(window.location.search);
+const path = params.get('path') || '/ds_ch/index';
+// blocks that compare against the page path (ey-nav, ey-side-nav) read this override
+window.eyPagePath = path;
+// emulate the EDS `<path>.plain.html` endpoint (used by fragment-style blocks) from the harness content dir
+const realFetch = window.fetch.bind(window);
+window.fetch = async (input, init) => {
+  const url = typeof input === 'string' ? input : input.url;
+  const m = url.match(/^(?:https?:\/\/[^/]+)?(\/(?!_preview)[^?#]*)\.plain\.html/);
+  if (m) {
+    const r = await realFetch(`/_preview/content${m[1]}.html`);
+    if (!r.ok) return r;
+    const d = new DOMParser().parseFromString(await r.text(), 'text/html');
+    return new Response(d.querySelector('main').innerHTML, { status: 200, headers: { 'content-type': 'text/html' } });
+  }
+  // ds_ch data sheets (/ds_ch/data/*.json) come from the harness content dir
+  if (/^(?:https?:\/\/[^/]+)?\/ds_ch\/.*\.json/.test(url)) return realFetch(`/_preview/content${url.replace(/^https?:\/\/[^/]+/, '')}`, init);
+  return realFetch(input, init);
+};
+// DA media paths (/ds_ch/media/..) are served from the harness content dir
+const fixMedia = (root) => root.querySelectorAll('img[src^="/ds_ch/media"], source[srcset^="/ds_ch/media"]').forEach((el) => {
+  if (el.hasAttribute('src')) el.setAttribute('src', `/_preview/content${el.getAttribute('src')}`);
+  if (el.hasAttribute('srcset')) el.setAttribute('srcset', `/_preview/content${el.getAttribute('srcset')}`);
+});
+const resp = await fetch(`/_preview/content${path}.html`);
+if (!resp.ok) { document.body.textContent = `content not found: ${path}`; throw new Error('404'); }
+const html = await resp.text();
+const doc = new DOMParser().parseFromString(html, 'text/html');
+// copy page metadata so getMetadata() works
+doc.querySelectorAll('main .metadata').forEach((m) => {
+  [...m.children].forEach((row) => {
+    const [k, v] = [...row.children].map((c) => c.textContent.trim());
+    if (k && v) {
+      const meta = document.createElement('meta');
+      meta.name = k.toLowerCase(); meta.content = v; document.head.append(meta);
+    }
+  });
+});
+const main = document.querySelector('main');
+main.innerHTML = doc.querySelector('main').innerHTML;
+// optional nav/footer fragments: decorated like fragment-loaded content in a real header/footer block
+const fragments = [];
+for (const [sel, name] of [['header', 'nav'], ['footer', 'footer']]) {
+  const dir = path.split('/').slice(0, 2).join('/');
+  const r = await fetch(`/_preview/content${dir}/${name}.html`);
+  if (r.ok) {
+    const d = new DOMParser().parseFromString(await r.text(), 'text/html');
+    const fm = document.createElement('main');
+    fm.innerHTML = d.querySelector('main').innerHTML;
+    fixMedia(fm);
+    decorateIcons(fm);
+    decorateSections(fm);
+    decorateBlocks(fm);
+    const wrap = document.createElement('div');
+    wrap.className = `${name}-fragment`;
+    wrap.append(...fm.children);
+    document.querySelector(sel).replaceChildren(wrap);
+    fragments.push(wrap);
+  }
+}
+fixMedia(main);
+// images added later by blocks (data sheets)
+new MutationObserver(() => fixMedia(document.body)).observe(document.body, { childList: true, subtree: true });
+decorateButtons(main);
+decorateIcons(main);
+decorateSections(main);
+decorateBlocks(main);
+document.body.classList.add('appear');
+await Promise.all([loadBlocks(main), ...fragments.map((f) => loadBlocks(f))]);
+loadCSS('/styles/lazy-styles.css');
+document.body.dataset.ready = 'true';
+</script>
+</body>
+</html>
