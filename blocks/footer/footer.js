@@ -10,7 +10,8 @@ export default async function decorate(block) {
   block.textContent = '';
 
   // load footer fragment
-  const footerPath = footerMeta.footer || '/footer';
+  // `footer` metadata is the path of the footer document (set per site through /metadata.json)
+  const footerPath = footerMeta ? new URL(footerMeta, window.location.href).pathname : '/footer';
   const fragment = await loadFragment(footerPath);
 
   // decorate footer DOM

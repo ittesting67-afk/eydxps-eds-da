@@ -1,4 +1,6 @@
-import { getMetadata, decorateIcons } from '../../scripts/aem.js';
+import {
+  getMetadata, decorateIcons, decorateSections, decorateBlocks, loadBlocks,
+} from '../../scripts/aem.js';
 import { migrateTree } from '../utils.js';
 
 // media query match that indicates mobile/tablet width
@@ -87,11 +89,25 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
 export default async function decorate(block) {
   // fetch nav content
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+  // `nav` metadata may be a relative path (/ds_x/nav) or a full URL
+  const navPath = navMeta ? new URL(navMeta, window.location.href).pathname : '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
 
   if (resp.ok) {
     const html = await resp.text();
+
+    // EY Discover site nav: banner + tab bar authored as ey-banner / ey-nav blocks in the nav document
+    if (/class="ey-(banner|nav)\b/.test(html)) {
+      const fragment = document.createElement('div');
+      fragment.className = 'nav-fragment';
+      fragment.innerHTML = html;
+      decorateIcons(fragment);
+      decorateSections(fragment);
+      decorateBlocks(fragment);
+      block.append(fragment);
+      await loadBlocks(fragment);
+      return;
+    }
 
     // decorate nav DOM
     const nav = document.createElement('nav');
