@@ -508,6 +508,10 @@
 }
 
 .ey-tiles.box ul.ey-tiles-list { position: relative; display: flex; }
+
+/* reveal panels sit under the (absolutely positioned) shared background picture: lift them above it */
+.ey-tiles.box .ey-tiles-panels,
+.ey-tiles.panorama .ey-tiles-panels { position: relative; background: #fff; }
 .ey-tiles.box .ey-tile { flex: 1 1 0; height: 210px; }
 .ey-tiles.box .ey-tile-face {
   display: flex;
