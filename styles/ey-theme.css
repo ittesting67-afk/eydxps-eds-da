@@ -552,6 +552,71 @@ html body main a.button.ey-wide:any-link {
   color: var(--ey-blue);
 }
 
+html body main.assurance-home .assurance-intro-media {
+  display: grid;
+  grid-template-columns: 30% minmax(0, 1fr);
+  align-items: center;
+  gap: 25px;
+  margin: 15px 0 30px;
+}
+
+html body main.assurance-home .assurance-video { margin: 0; }
+html body main.assurance-home .assurance-video a,
+html body main.assurance-home .assurance-video picture,
+html body main.assurance-home .assurance-video img {
+  display: block;
+  width: 100%;
+}
+
+html body main.assurance-home .assurance-video a:focus-visible {
+  outline: 2px solid var(--ey-blue);
+  outline-offset: 4px;
+}
+
+html body main.assurance-home blockquote.assurance-video-quote {
+  position: relative;
+  margin: 0;
+  padding: 15px 15px 15px 50px;
+  background: var(--ey-bg);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+html body main.assurance-home blockquote.assurance-video-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: var(--ey-yellow);
+  font-size: 40px;
+  line-height: 1;
+}
+
+html body main.assurance-home .assurance-video-quote > :last-child { margin-bottom: 0; }
+html body main.assurance-home p.assurance-priorities-container { margin: 15px 0 25px; }
+html body main.assurance-home a.assurance-priorities:any-link {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 0;
+  background: var(--ey-yellow);
+  color: #000;
+  text-align: center;
+  text-transform: none;
+  white-space: normal;
+}
+
+@media (max-width: 600px) {
+  html body main.assurance-home .assurance-intro-media {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  html body main.assurance-home .assurance-video { max-width: 260px; }
+}
+
 /* ---------------------------------------------------------------- icons (EDS :name: tokens) */
 html body .icon {
   display: inline-block;

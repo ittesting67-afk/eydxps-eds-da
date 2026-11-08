@@ -15,11 +15,16 @@
  * Visual variants: cards, flip, buttons, image (+outlined), tab, bar, slide, overlay, box
  * (+labelbar), panorama, panels, media. Optional modifiers: reveal, cols-2 .. cols-6,
  * short, light (reveal panel in the lighter "tile-content" style).
+ * Button layouts: sub-service-lines (centered yellow buttons), hot-topics (tall six-column tiles).
+ * Variant `wheel`: tiles become donut segments (clockwise from 12 o'clock); a first row with a
+ * single cell is the centre label. With `reveal`, panels open beside the wheel.
  */
 
-const WHOLE_LINK = ['flip', 'buttons', 'image', 'tab', 'bar', 'slide', 'overlay', 'box', 'panorama'];
+const WHOLE_LINK = ['flip', 'buttons', 'image', 'tab', 'bar', 'slide', 'overlay', 'box', 'panorama', 'wheel'];
 const SHARED_BG = ['box', 'panorama', 'flip'];
-const NO_PIC = ['buttons', 'panels', 'box', 'panorama', 'flip']; // pictures are ignored per tile
+const NO_PIC = ['buttons', 'panels', 'box', 'panorama', 'flip', 'wheel']; // pictures are ignored per tile
+// SharePoint CCaSS wheel colours, in authoring order
+const WHEEL_COLORS = ['#161d5c', '#b82a24', '#e3500f', '#1f8a3c', '#1d5db4'];
 const ROLES = {
   cards: ['title', 'desc', 'meta'],
   overlay: ['title', 'tag'],
@@ -186,6 +191,37 @@ function buildTile(item, variant, reveal, panels) {
   return li;
 }
 
+function buildWheel(list, center) {
+  const tiles = [...list.children];
+  const step = 360 / tiles.length;
+  const point = (deg, r) => {
+    const rad = (deg * Math.PI) / 180;
+    return `${(50 + r * Math.sin(rad)).toFixed(2)}% ${(50 - r * Math.cos(rad)).toFixed(2)}%`;
+  };
+  tiles.forEach((tile, i) => {
+    const from = i * step;
+    const arc = [];
+    for (let d = from; d < from + step; d += 5) arc.push(point(d, 50));
+    arc.push(point(from + step, 50));
+    tile.style.clipPath = `polygon(50% 50%, ${arc.join(', ')})`;
+    const [x, y] = point(from + step / 2, 34.5).split(' ');
+    tile.style.setProperty('--ey-wheel-x', x);
+    tile.style.setProperty('--ey-wheel-y', y);
+    tile.style.setProperty('--ey-wheel-color', WHEEL_COLORS[i % WHEEL_COLORS.length]);
+  });
+
+  const wheel = document.createElement('div');
+  wheel.className = 'ey-wheel';
+  wheel.append(list);
+  if (center) {
+    const label = document.createElement('p');
+    label.className = 'ey-wheel-center';
+    label.textContent = textOf(center.texts[0]);
+    wheel.append(label);
+  }
+  return wheel;
+}
+
 function wireReveal(block, panels) {
   const closeAll = () => panels.forEach(({ panel, face }) => {
     panel.hidden = true;
@@ -216,11 +252,20 @@ function wireReveal(block, panels) {
 }
 
 export default function decorate(block) {
-  const known = ['cards', 'flip', 'buttons', 'image', 'tab', 'bar', 'slide', 'overlay', 'box', 'panorama', 'panels', 'media'];
+  const known = ['cards', 'flip', 'buttons', 'image', 'tab', 'bar', 'slide', 'overlay', 'box', 'panorama', 'panels', 'media', 'wheel'];
   let variant = known.find((v) => block.classList.contains(v));
   if (!variant) {
     variant = 'buttons';
     block.classList.add(variant);
+  }
+  const pagePath = window.eyPagePath || window.location.pathname;
+  if (variant === 'buttons' && /^\/ds_tax(?:\/|$)/i.test(pagePath)
+    && !block.classList.contains('sub-service-lines') && !block.classList.contains('hot-topics')) {
+    const previous = block.previousElementSibling
+      || block.closest('.ey-tiles-wrapper')?.previousElementSibling;
+    const heading = previous?.matches('h2, h3, h4') ? previous : previous?.lastElementChild;
+    if (heading?.id === 'sub-service-lines') block.classList.add('sub-service-lines');
+    if (heading?.id === 'tax-hot-topics') block.classList.add('hot-topics');
   }
   const reveal = block.classList.contains('reveal');
   const rows = [...block.children];
@@ -239,6 +284,9 @@ export default function decorate(block) {
     }
   });
 
+  const center = variant === 'wheel' && items[0] && !items[0].pic && items[0].texts.length === 1
+    ? items.shift() : null;
+
   const list = document.createElement('ul');
   list.className = 'ey-tiles-list';
   const panels = [];
@@ -252,7 +300,7 @@ export default function decorate(block) {
     bg.append(bgPic.tagName === 'PICTURE' ? bgPic : (() => { const p = document.createElement('picture'); p.append(bgPic); return p; })());
     block.append(bg);
   }
-  block.append(list);
+  block.append(variant === 'wheel' ? buildWheel(list, center) : list);
 
   if (more) {
     const wrap = document.createElement('div');
@@ -267,7 +315,11 @@ export default function decorate(block) {
   if (panels.length) {
     const holder = document.createElement('div');
     holder.className = 'ey-tiles-panels';
-    panels.forEach(({ panel }) => holder.append(panel));
+    panels.forEach(({ panel, face }) => {
+      const color = face.closest('.ey-tile').style.getPropertyValue('--ey-wheel-color');
+      if (color) panel.style.setProperty('--ey-wheel-color', color);
+      holder.append(panel);
+    });
     block.append(holder);
     wireReveal(block, panels);
   }
