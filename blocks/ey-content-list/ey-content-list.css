@@ -159,6 +159,10 @@
   color: #2e2e38;
 }
 
+.ey-content-list.cards .ey-cl-more:any-link {
+  margin-top: 0;
+}
+
 @media (max-width: 767px) {
   /* source overflows the viewport here; scroll-snap row is the controlled equivalent */
   .ey-content-list.cards .ey-cl-list {
