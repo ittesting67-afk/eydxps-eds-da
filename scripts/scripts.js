@@ -60,6 +60,39 @@ function buildAutoBlocks(main) {
  * Decorates the main element.
  * @param {Element} main The main element
  */
+function decorateAssuranceHome(main) {
+  const pagePath = window.eyPagePath || window.location.pathname;
+  if (!/^\/ds_assurance\/pages\/home(?:\.html)?\/?$/i.test(pagePath)) return;
+
+  main.classList.add('assurance-home');
+  const image = main.querySelector('img[alt="Assurance at EY: We\'re All in"]');
+  const imageParagraph = image?.closest('p');
+  const linkParagraph = imageParagraph?.nextElementSibling;
+  const videoLink = linkParagraph?.querySelector('a[href*="/embed.aspx"]');
+  const quote = linkParagraph?.nextElementSibling;
+  if (imageParagraph && videoLink && quote?.tagName === 'BLOCKQUOTE') {
+    const media = document.createElement('div');
+    media.className = 'assurance-intro-media';
+    imageParagraph.before(media);
+    videoLink.setAttribute('aria-label', videoLink.textContent.trim());
+    videoLink.classList.remove('button', 'primary', 'secondary');
+    videoLink.replaceChildren(...imageParagraph.childNodes);
+    imageParagraph.replaceChildren(videoLink);
+    imageParagraph.className = 'assurance-video';
+    quote.classList.add('assurance-video-quote');
+    media.append(imageParagraph, quote);
+    linkParagraph.remove();
+  }
+
+  main.querySelector('.ey-tiles.box.labelbox.reveal')?.classList.add('assurance-strategy');
+  main.querySelector('.ey-tiles.media')?.classList.add('assurance-leaders');
+  const priorities = [...main.querySelectorAll('a')].find((link) => /^All in:\s*Our Assurance Priorities$/i.test(link.textContent.trim()));
+  if (priorities) {
+    priorities.classList.add('assurance-priorities');
+    priorities.closest('p')?.classList.add('assurance-priorities-container');
+  }
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
@@ -68,6 +101,7 @@ export function decorateMain(main) {
   // buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateAssuranceHome(main);
 }
 
 /**
