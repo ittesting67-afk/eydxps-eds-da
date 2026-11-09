@@ -446,6 +446,55 @@
   color: #000;
 }
 
+/* ---- bar, link-only (no reveal / no description): SharePoint `.buzz-sec` tiles (Indirect Tax "Service offerings")
+   Spaced 172px picture tiles (30px columns, 8px rows) with a black caption bar at the bottom. On hover the
+   caption jumps to the top and a yellow panel with "Click to know more." covers the picture. */
+.ey-tiles.bar:not(.reveal) ul.ey-tiles-list { gap: 8px 30px; }
+.ey-tiles.bar:not(.reveal) .ey-tile { height: 172px; border-right: 0; }
+.ey-tiles.bar:not(.reveal) .ey-tile-pic { bottom: 0; }
+
+.ey-tiles.bar:not(.reveal) .ey-tile-label {
+  top: auto;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  min-height: 36px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+}
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face::after {
+  content: 'Click to know more.';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 10px 0;
+  background: rgba(254, 230, 0, 0.85);
+  color: #000;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face:hover::after,
+.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible::after { opacity: 1; }
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible .ey-tile-label {
+  top: 0;
+  bottom: auto;
+  background: #000;
+  color: #fff;
+}
+
 /* ------------------------------------------------------------------ slide */
 /* SharePoint: .col-md-3.strategic-sec > img + a > .overlay-sec (sector.aspx): caption slides up on hover */
 .ey-tiles.slide { margin: 0; }
@@ -640,7 +689,7 @@
 }
 
 .ey-tiles.box.labelbox .ey-tile-face:hover,
-.ey-tiles.box.labelbox .ey-tile-face.active { background: rgba(254, 230, 0, 0.9); }
+.ey-tiles.box.labelbox .ey-tile-face.active { background: rgba(254, 230, 0, 0.85); }
 .ey-tiles.box.labelbox .ey-tile-face:hover .ey-tile-label,
 .ey-tiles.box.labelbox .ey-tile-face.active .ey-tile-label { color: #fff; }
 

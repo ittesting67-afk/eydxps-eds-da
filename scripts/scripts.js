@@ -231,10 +231,29 @@ function decorateSlideGrids(main) {
   });
 }
 
+/**
+ * Callout bar (SharePoint: <p style="border-left:8px solid #fee600; background:#efefef"><a>...</a></p>).
+ * A paragraph that holds ONLY a link whose text is a full sentence (ends with a full stop) is a
+ * callout, not a button: undo the button decoration and mark it so ey-theme.css can style it.
+ * Short link labels (no trailing full stop) stay buttons. Author it as a plain paragraph + link.
+ * @param {Element} main
+ */
+function decorateCallouts(main) {
+  main.querySelectorAll('p.button-container').forEach((p) => {
+    const a = p.querySelector(':scope > a.button');
+    if (!a || p.children.length !== 1) return;
+    const text = a.textContent.trim();
+    if (text.length < 20 || !text.endsWith('.')) return;
+    a.className = '';
+    p.className = 'ey-callout';
+  });
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
   decorateButtons(main);
+  decorateCallouts(main);
   decorateIcons(main);
   // buildAutoBlocks(main);
   decorateSections(main);
