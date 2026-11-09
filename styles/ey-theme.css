@@ -617,6 +617,122 @@ html body main.assurance-home a.assurance-priorities:any-link {
   html body main.assurance-home .assurance-video { max-width: 260px; }
 }
 
+/* leadership groups built by decorateProfileGroups (scripts.js) */
+html body main .ey-profile-groups { margin: 15px 0; }
+
+html body main .ey-profile-groups-tabs {
+  display: grid;
+  grid-template-columns: repeat(var(--ey-profile-groups, 3), minmax(0, 1fr));
+  gap: 15px;
+}
+
+html body main button.ey-profile-group-tab {
+  min-height: 50px;
+  margin: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 0;
+  background: var(--ey-grey-150);
+  color: #000;
+  font-family: var(--ey-font-bold);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  white-space: normal;
+  transition: background 0.3s;
+}
+
+html body main button.ey-profile-group-tab:hover,
+html body main button.ey-profile-group-tab[aria-expanded='true'] {
+  background: var(--ey-yellow);
+  color: #000;
+}
+
+html body main button.ey-profile-group-tab:focus-visible,
+html body main button.ey-profile-group-close:focus-visible {
+  outline: 2px solid var(--ey-blue);
+  outline-offset: 2px;
+}
+
+html body main .ey-profile-group { margin-top: 15px; background: var(--ey-grey-50); }
+html body main .ey-profile-group[hidden] { display: none; }
+
+html body main .ey-profile-group-head {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: var(--ey-yellow);
+}
+
+html body main .ey-profile-group-head h5 {
+  margin: 0;
+  padding: 6px 8px;
+  color: #000;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+html body main button.ey-profile-group-close {
+  flex: 0 0 32px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: #e0e0e0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+html body main button.ey-profile-group-close:hover { background: #cfcfcf; }
+html body main .ey-profile-group .ey-tiles { margin: 0; }
+
+@media (max-width: 600px) {
+  html body main .ey-profile-groups-tabs { grid-template-columns: 1fr; gap: 10px; }
+}
+
+/* slide thumbnails built by decorateSlideGrids (scripts.js); hover enlarges like SharePoint */
+html body main .ey-slides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 15px;
+  margin: 10px 10px 20px;
+}
+
+html body main .ey-slide h5 {
+  margin: 0 0 8px;
+  font-family: var(--ey-font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+html body main .ey-slide-frame {
+  position: relative;
+  margin: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+html body main .ey-slide-frame img { display: block; width: 100%; }
+html body main .ey-slide:nth-child(odd) .ey-slide-frame { transform-origin: left center; }
+html body main .ey-slide:nth-child(even) .ey-slide-frame { transform-origin: right center; }
+
+@media (hover: hover) and (min-width: 768px) {
+  html body main .ey-slide-frame:hover,
+  html body main .ey-slide-frame:focus-visible {
+    z-index: 5;
+    outline: none;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    /* 2x = full grid width, so the zoom never leaves the content area */
+    transform: scale(2);
+  }
+}
+
+@media (max-width: 600px) {
+  html body main .ey-slides { grid-template-columns: 1fr; margin: 10px 0 20px; }
+}
+
 /* ---------------------------------------------------------------- icons (EDS :name: tokens) */
 html body .icon {
   display: inline-block;
