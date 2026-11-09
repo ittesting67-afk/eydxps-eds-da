@@ -15,7 +15,9 @@
  * Visual variants: cards, flip, buttons, image (+outlined), tab, bar, slide, overlay, box
  * (+labelbar), panorama, panels, media. Optional modifiers: reveal, cols-2 .. cols-6,
  * short, light (reveal panel in the lighter "tile-content" style).
- * Button layouts: sub-service-lines (centered yellow buttons), hot-topics (tall six-column tiles).
+ * Button layouts: yellow (rounded yellow link buttons, 3 per row, left-aligned; add `centered` to
+ * centre the last row, `short` for the compact 38px size), sub-service-lines (= yellow centered),
+ * hot-topics (tall six-column tiles).
  * Variant `wheel`: tiles become donut segments (clockwise from 12 o'clock); a first row with a
  * single cell is the centre label. With `reveal`, panels open beside the wheel.
  */
@@ -113,6 +115,10 @@ function buildTile(item, variant, reveal, panels) {
     pw.append(pic.tagName === 'PICTURE' ? pic : (() => { const p = document.createElement('picture'); p.append(pic); return p; })());
     const img = pw.querySelector('img');
     if (img && !img.getAttribute('loading')) img.loading = 'lazy';
+    face.append(pw);
+  } else if (item.emptyPic) {
+    const pw = document.createElement('div');
+    pw.className = 'ey-tile-pic';
     face.append(pw);
   }
 
@@ -275,6 +281,12 @@ export default function decorate(block) {
   const items = [];
   rows.forEach((row) => {
     const item = parseRow(row);
+    // media: an empty first cell is a missing photo, not an empty title
+    if (variant === 'media' && !item.pic && item.texts.length > 1 && !textOf(item.texts[0])
+      && !item.texts[0].querySelector('a, ul, ol')) {
+      item.texts.shift();
+      item.emptyPic = true;
+    }
     if (item.pic && !item.texts.length && SHARED_BG.includes(variant) && !items.length && !bgPic) {
       bgPic = item.pic;
     } else if (variant === 'cards' && !item.pic && item.texts.length === 1 && item.texts[0].querySelector('a')) {
