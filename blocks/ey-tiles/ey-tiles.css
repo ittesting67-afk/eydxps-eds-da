@@ -231,32 +231,55 @@
   font-weight: bold;
 }
 
+/* yellow rounded link buttons: ey-tiles (buttons, yellow [, centered] [, short]).
+   sub-service-lines (Tax home) = yellow + centered */
 .ey-tiles.buttons.sub-service-lines,
+.ey-tiles.buttons.yellow,
 .ey-tiles.buttons.hot-topics { margin-bottom: 20px; }
 
-.ey-tiles.buttons.sub-service-lines ul.ey-tiles-list {
+.ey-tiles.buttons.sub-service-lines ul.ey-tiles-list,
+.ey-tiles.buttons.yellow ul.ey-tiles-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 15px;
 }
 
-.ey-tiles.buttons.sub-service-lines .ey-tile {
+.ey-tiles.buttons.sub-service-lines ul.ey-tiles-list,
+.ey-tiles.buttons.yellow.centered ul.ey-tiles-list { justify-content: center; }
+
+.ey-tiles.buttons.sub-service-lines .ey-tile,
+.ey-tiles.buttons.yellow .ey-tile {
   flex: 0 0 calc((100% - 30px) / 3);
   height: 60px;
 }
 
-.ey-tiles.buttons.sub-service-lines .ey-tile-face {
+.ey-tiles.buttons.sub-service-lines .ey-tile-face,
+.ey-tiles.buttons.yellow .ey-tile-face {
   border-radius: 10px;
   background: var(--_yellow);
 }
 
 .ey-tiles.buttons.sub-service-lines .ey-tile-face:hover,
 .ey-tiles.buttons.sub-service-lines .ey-tile-face.active,
-.ey-tiles.buttons.sub-service-lines .ey-tile-face:focus-visible {
+.ey-tiles.buttons.sub-service-lines .ey-tile-face:focus-visible,
+.ey-tiles.buttons.yellow .ey-tile-face:hover,
+.ey-tiles.buttons.yellow .ey-tile-face.active,
+.ey-tiles.buttons.yellow .ey-tile-face:focus-visible {
   background: #000;
   color: var(--_yellow);
   font-weight: normal;
+}
+
+/* short (PAS "PAS Tax Resources"): 38px buttons, 12px text */
+.ey-tiles.buttons.yellow.short ul.ey-tiles-list { gap: 20px 10px; }
+.ey-tiles.buttons.yellow.short .ey-tile { flex-basis: calc((100% - 20px) / 3); height: 38px; }
+
+.ey-tiles.buttons.yellow.short .ey-tile-face {
+  height: 38px;
+  padding: 5px 9px;
+  font-size: 12px;
+  line-height: 14px;
 }
 
 .ey-tiles.buttons.hot-topics ul.ey-tiles-list {
@@ -702,15 +725,38 @@
 .ey-tiles.media .ey-tile-label a,
 .ey-tiles.media .ey-tile-desc a { color: var(--_link); }
 
-.ey-tiles.media.assurance-leaders .ey-tile-face { align-items: center; }
-.ey-tiles.media.assurance-leaders .ey-tile-pic { padding-bottom: 0; }
-.ey-tiles.media.assurance-leaders .ey-tile-pic img {
+.ey-tiles.media.profiles .ey-tile-face { align-items: center; }
+.ey-tiles.media.profiles .ey-tile-pic {
+  flex: 0 0 clamp(55px, 33.333%, 85px);
+  max-width: none;
+  padding: 0 10px 0 0;
+}
+.ey-tiles.media.profiles .ey-tile-pic img {
   aspect-ratio: 1;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.ey-tiles.media.assurance-leaders .ey-tile-label { margin-bottom: 0; }
+.ey-tiles.media.profiles .ey-tile-label { margin-bottom: 0; }
+.ey-tiles.media.profiles .ey-tile { container-type: inline-size; }
+
+/* narrow columns (e.g. CCaSS beside the rail): SharePoint uses smaller profile text there */
+@container (max-width: 200px) {
+  .ey-tiles.media.profiles .ey-tile-face { padding: 8px 5px; }
+  .ey-tiles.media.profiles .ey-tile-label { font-size: 12px; line-height: 14px; }
+
+  .ey-tiles.media.profiles .ey-tile-desc,
+  .ey-tiles.media.profiles .ey-tile-meta { font-size: 11px; line-height: 14px; }
+}
+
+/* 4 per row in a narrow column (BT "Global leadership"): small photo, SharePoint ~32px */
+@container (max-width: 130px) {
+  .ey-tiles.media.profiles .ey-tile-pic { flex-basis: 40px; padding-right: 6px; }
+  .ey-tiles.media.profiles .ey-tile-label { font-size: 11px; line-height: 13px; }
+
+  .ey-tiles.media.profiles .ey-tile-desc,
+  .ey-tiles.media.profiles .ey-tile-meta { font-size: 10px; line-height: 13px; }
+}
 
 /* ------------------------------------------------------------ reveal panel */
 /* SharePoint: .erfsecitem (+ .erf-cnt-sec-items) / .tile-content (+ .tile-inner): content shown under the tiles */
@@ -809,12 +855,16 @@
   margin: 20px 0;
 }
 
+.ey-tiles.wheel:not(:has(.ey-tile-panel:not([hidden]))) { grid-template-columns: 1fr; }
+.ey-tiles.wheel:not(:has(.ey-tile-panel:not([hidden]))) .ey-tiles-panels { display: none; }
+
 .ey-tiles.wheel .ey-wheel {
   position: relative;
   width: 100%;
-  max-width: 260px;
+  max-width: 390px;
   aspect-ratio: 1;
   justify-self: center;
+  container-type: inline-size;
 }
 
 .ey-tiles.wheel ul.ey-tiles-list { display: block; position: absolute; inset: 0; }
@@ -840,8 +890,8 @@
   left: var(--ey-wheel-x);
   width: 30%;
   transform: translate(-50%, -50%);
-  font-size: 9px;
-  line-height: 11px;
+  font-size: 3.4cqw;
+  line-height: 1.2;
 }
 
 .ey-tiles.wheel .ey-wheel-center {
@@ -851,17 +901,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38%;
+  width: 42%;
   aspect-ratio: 1;
   margin: 0;
-  padding: 8px;
+  padding: 3%;
   border-radius: 50%;
   background: #fff;
   color: #000;
   font-family: var(--_bold);
-  font-size: 8px;
+  font-size: 3.1cqw;
   font-weight: 700;
-  line-height: 10px;
+  line-height: 1.2;
   text-align: center;
   text-transform: uppercase;
   transform: translate(-50%, -50%);
@@ -872,28 +922,28 @@
 .ey-tiles.wheel .ey-tile-panel::before { content: none; }
 
 .ey-tiles.wheel .ey-tile-panel-head {
-  margin: 0 0 10px;
-  padding: 5px 30px 5px 5px;
+  margin: 0 0 15px;
+  padding: 6px 36px 6px 6px;
   border: 0;
   background: var(--ey-wheel-color);
 }
 
-.ey-tiles.wheel .ey-tile-panel-head h4 { color: #fff; font-size: 12px; font-weight: 700; line-height: 15px; }
+.ey-tiles.wheel .ey-tile-panel-head h4 { color: #fff; font-size: 14px; font-weight: 700; line-height: 20px; }
 
 .ey-tiles.wheel .ey-tile-panel-close {
   top: 0;
   bottom: 0;
-  width: 22px;
+  width: 26px;
   padding: 0;
   border-radius: 0;
   background: #8c8c8c;
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .ey-tiles.wheel .ey-tile-panel-close:hover { background: #6e6e6e; }
-.ey-tiles.wheel .ey-tile-panel-body { padding: 0 5px; font-size: 12px; line-height: 16px; }
+.ey-tiles.wheel .ey-tile-panel-body { padding: 0; }
 
 /* column overrides: ey-tiles (buttons cols-3) */
 .ey-tiles.cols-2 { --ey-tiles-cols: 2; }
@@ -918,6 +968,8 @@
   .ey-tiles.media ul.ey-tiles-list { grid-template-columns: 1fr; }
 
   .ey-tiles.media .ey-tile-pic { display: none; }
+
+  .ey-tiles.media.profiles .ey-tile-pic { display: block; }
   .ey-tiles.overlay ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ey-tiles.bar ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ey-tiles.wheel { grid-template-columns: 1fr; }
@@ -925,7 +977,9 @@
 
 @media (max-width: 720px) {
   .ey-tiles.buttons ul.ey-tiles-list { grid-template-columns: 1fr; }
-  .ey-tiles.buttons.sub-service-lines .ey-tile { flex-basis: calc((100% - 15px) / 2); }
+  .ey-tiles.buttons.sub-service-lines .ey-tile,
+  .ey-tiles.buttons.yellow .ey-tile,
+  .ey-tiles.buttons.yellow.short .ey-tile { flex-basis: calc((100% - 15px) / 2); }
   .ey-tiles.buttons.hot-topics ul.ey-tiles-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .ey-tiles.buttons.hot-topics .ey-tile,
   .ey-tiles.buttons.hot-topics .ey-tile-face { height: 160px; }
@@ -943,6 +997,8 @@
 }
 
 @media (max-width: 480px) {
-  .ey-tiles.buttons.sub-service-lines .ey-tile { flex-basis: 100%; }
+  .ey-tiles.buttons.sub-service-lines .ey-tile,
+  .ey-tiles.buttons.yellow .ey-tile,
+  .ey-tiles.buttons.yellow.short .ey-tile { flex-basis: 100%; }
   .ey-tiles.buttons.hot-topics ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
