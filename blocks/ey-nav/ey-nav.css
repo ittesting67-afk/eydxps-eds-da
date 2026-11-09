@@ -10,16 +10,49 @@ html body .ey-nav-wrapper {
   font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
 }
 
+/* The boilerplate `header nav` rules (grid/flex, height, padding) also match this inner <nav>,
+   which made the tab list shrink-wrap and centre. Reset them so the bar is a plain full-width block. */
+html body header .ey-nav .ey-nav-bar {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  gap: 0;
+  padding: 0;
+}
+
+/* Tab list uses the same container as `main` (750 / 970 / 1170, fluid below 768) so the first tab
+   lines up with the left edge of the content cards at every width. */
 .ey-nav .ey-nav-bar > ul {
   display: flex;
   box-sizing: border-box;
-  max-width: var(--ey-container, 1170px);
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0;
   list-style: none;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
+}
+
+@media (min-width: 768px) {
+  .ey-nav .ey-nav-bar > ul {
+    max-width: 750px;
+    padding: 0 var(--ey-gutter, 15px);
+  }
+}
+
+@media (min-width: 992px) {
+  .ey-nav .ey-nav-bar > ul {
+    max-width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ey-nav .ey-nav-bar > ul {
+    max-width: var(--ey-container, 1170px);
+  }
 }
 
 .ey-nav .ey-nav-bar > ul::-webkit-scrollbar {
