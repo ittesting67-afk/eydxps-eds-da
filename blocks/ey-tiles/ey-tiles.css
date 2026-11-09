@@ -1003,6 +1003,21 @@
 .ey-tiles.short.image .ey-tile,
 .ey-tiles.short.image .ey-tile-face { min-height: 150px; }
 
+/* media, collage: SharePoint 4 x (190px photo + 190px grey text panel) checkerboard (DS_FS "Why EY / FS Analytics /
+   EY Relationships / Insights"). Each tile is a column: photo then panel, reversed on even columns. Authoring is the
+   normal media row (image | title | link list); only the block name changes: ey-tiles (media, collage). */
+.ey-tiles.media.collage { --ey-tiles-cols: 4; margin: 15px 0; }
+.ey-tiles.media.collage ul.ey-tiles-list { gap: 10px; align-items: start; }
+.ey-tiles.media.collage .ey-tile-face { flex-direction: column; gap: 10px; padding: 0; }
+.ey-tiles.media.collage .ey-tile:nth-child(even) .ey-tile-face { flex-direction: column-reverse; }
+.ey-tiles.media.collage .ey-tile-pic { display: block; flex: 0 0 auto; max-width: none; padding: 0; aspect-ratio: 1; }
+.ey-tiles.media.collage .ey-tile-pic picture { display: block; height: 100%; }
+.ey-tiles.media.collage .ey-tile-pic img { height: 100%; object-fit: cover; }
+.ey-tiles.media.collage .ey-tile-text { flex: 0 0 auto; padding: 20px; background: #ececec; aspect-ratio: 1; }
+.ey-tiles.media.collage .ey-tile-label { margin: 0 0 15px; font-size: 20px; line-height: 22px; }
+.ey-tiles.media.collage .ey-tile-desc ul { margin: 0; padding-left: 20px; }
+.ey-tiles.media.collage .ey-tile-desc li { margin: 0 0 5px; }
+
 /* --------------------------------------------------------------- responsive */
 /* Source breakpoints: bootstrap 991 / 767, erf-sec 720 / 600 (+550). Where the SharePoint web parts
    do not reflow at all on small screens (they just get clipped) the tiles go to 2 columns / 1 column. */
@@ -1016,7 +1031,8 @@
   .ey-tiles.panels ul.ey-tiles-list,
   .ey-tiles.media ul.ey-tiles-list { grid-template-columns: 1fr; }
 
-  .ey-tiles.media .ey-tile-pic { display: none; }
+  .ey-tiles.media:not(.collage) .ey-tile-pic { display: none; }
+  .ey-tiles.media.collage ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .ey-tiles.media.profiles .ey-tile-pic { display: block; }
   .ey-tiles.overlay ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
