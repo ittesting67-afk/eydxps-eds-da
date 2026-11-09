@@ -446,6 +446,55 @@
   color: #000;
 }
 
+/* ---- bar, link-only (no reveal / no description): SharePoint `.buzz-sec` tiles (Indirect Tax "Service offerings")
+   Spaced 172px picture tiles (30px columns, 8px rows) with a black caption bar at the bottom. On hover the
+   caption jumps to the top and a yellow panel with "Click to know more." covers the picture. */
+.ey-tiles.bar:not(.reveal) ul.ey-tiles-list { gap: 8px 30px; }
+.ey-tiles.bar:not(.reveal) .ey-tile { height: 172px; border-right: 0; }
+.ey-tiles.bar:not(.reveal) .ey-tile-pic { bottom: 0; }
+
+.ey-tiles.bar:not(.reveal) .ey-tile-label {
+  top: auto;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  min-height: 36px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+}
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face::after {
+  content: 'Click to know more.';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 10px 0;
+  background: rgba(254, 230, 0, 0.85);
+  color: #000;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face:hover::after,
+.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible::after { opacity: 1; }
+
+.ey-tiles.bar:not(.reveal) .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible .ey-tile-label {
+  top: 0;
+  bottom: auto;
+  background: #000;
+  color: #fff;
+}
+
 /* ------------------------------------------------------------------ slide */
 /* SharePoint: .col-md-3.strategic-sec > img + a > .overlay-sec (sector.aspx): caption slides up on hover */
 .ey-tiles.slide { margin: 0; }
@@ -640,7 +689,7 @@
 }
 
 .ey-tiles.box.labelbox .ey-tile-face:hover,
-.ey-tiles.box.labelbox .ey-tile-face.active { background: rgba(254, 230, 0, 0.9); }
+.ey-tiles.box.labelbox .ey-tile-face.active { background: rgba(254, 230, 0, 0.85); }
 .ey-tiles.box.labelbox .ey-tile-face:hover .ey-tile-label,
 .ey-tiles.box.labelbox .ey-tile-face.active .ey-tile-label { color: #fff; }
 
@@ -954,6 +1003,21 @@
 .ey-tiles.short.image .ey-tile,
 .ey-tiles.short.image .ey-tile-face { min-height: 150px; }
 
+/* media, collage: SharePoint 4 x (190px photo + 190px grey text panel) checkerboard (DS_FS "Why EY / FS Analytics /
+   EY Relationships / Insights"). Each tile is a column: photo then panel, reversed on even columns. Authoring is the
+   normal media row (image | title | link list); only the block name changes: ey-tiles (media, collage). */
+.ey-tiles.media.collage { --ey-tiles-cols: 4; margin: 15px 0; }
+.ey-tiles.media.collage ul.ey-tiles-list { gap: 10px; align-items: start; }
+.ey-tiles.media.collage .ey-tile-face { flex-direction: column; gap: 10px; padding: 0; }
+.ey-tiles.media.collage .ey-tile:nth-child(even) .ey-tile-face { flex-direction: column-reverse; }
+.ey-tiles.media.collage .ey-tile-pic { display: block; flex: 0 0 auto; max-width: none; padding: 0; aspect-ratio: 1; }
+.ey-tiles.media.collage .ey-tile-pic picture { display: block; height: 100%; }
+.ey-tiles.media.collage .ey-tile-pic img { height: 100%; object-fit: cover; }
+.ey-tiles.media.collage .ey-tile-text { flex: 0 0 auto; padding: 20px; background: #ececec; aspect-ratio: 1; }
+.ey-tiles.media.collage .ey-tile-label { margin: 0 0 15px; font-size: 20px; line-height: 22px; }
+.ey-tiles.media.collage .ey-tile-desc ul { margin: 0; padding-left: 20px; }
+.ey-tiles.media.collage .ey-tile-desc li { margin: 0 0 5px; }
+
 /* --------------------------------------------------------------- responsive */
 /* Source breakpoints: bootstrap 991 / 767, erf-sec 720 / 600 (+550). Where the SharePoint web parts
    do not reflow at all on small screens (they just get clipped) the tiles go to 2 columns / 1 column. */
@@ -967,7 +1031,8 @@
   .ey-tiles.panels ul.ey-tiles-list,
   .ey-tiles.media ul.ey-tiles-list { grid-template-columns: 1fr; }
 
-  .ey-tiles.media .ey-tile-pic { display: none; }
+  .ey-tiles.media:not(.collage) .ey-tile-pic { display: none; }
+  .ey-tiles.media.collage ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .ey-tiles.media.profiles .ey-tile-pic { display: block; }
   .ey-tiles.overlay ul.ey-tiles-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }

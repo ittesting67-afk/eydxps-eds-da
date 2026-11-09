@@ -967,3 +967,22 @@ html body main .metadata,
 html body main .section:has(> div > .metadata:only-child) {
   display: none;
 }
+
+/* callout bar: a lone sentence-link paragraph (see decorateCallouts in scripts.js) */
+html body main p.ey-callout {
+  margin: 20px 0 15px;
+  padding: 10px;
+  border-left: 8px solid var(--ey-yellow, #fee600);
+  background: #efefef;
+  font-size: 110%;
+  text-align: left;
+}
+
+html body main p.ey-callout a:any-link {
+  color: var(--ey-blue, #32679b);
+  text-decoration: none;
+}
+
+html body main p.ey-callout a:any-link:hover {
+  text-decoration: underline;
+}
