@@ -545,3 +545,12 @@
 .ey-content-list.hide-empty.ey-cl-empty {
   display: none;
 }
+
+/* events in the right rail: white card like the SharePoint "Upcoming events" web part
+   (empty blocks stay hidden through .hide-empty / .ey-cl-empty) */
+.ey-content-list.events {
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #fff;
+}
