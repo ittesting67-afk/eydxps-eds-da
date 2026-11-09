@@ -85,12 +85,150 @@ function decorateAssuranceHome(main) {
   }
 
   main.querySelector('.ey-tiles.box.labelbox.reveal')?.classList.add('assurance-strategy');
-  main.querySelector('.ey-tiles.media')?.classList.add('assurance-leaders');
   const priorities = [...main.querySelectorAll('a')].find((link) => /^All in:\s*Our Assurance Priorities$/i.test(link.textContent.trim()));
   if (priorities) {
     priorities.classList.add('assurance-priorities');
     priorities.closest('p')?.classList.add('assurance-priorities-container');
   }
+}
+
+let profileGroupId = 0;
+
+function buildProfileGroups(run) {
+  const groups = document.createElement('div');
+  groups.className = 'ey-profile-groups';
+  groups.style.setProperty('--ey-profile-groups', run.length);
+  const tabs = document.createElement('div');
+  tabs.className = 'ey-profile-groups-tabs';
+  run[0].head.before(groups);
+  groups.append(tabs);
+
+  const entries = run.map(({ head, h5, body }) => {
+    profileGroupId += 1;
+    const panel = document.createElement('section');
+    panel.className = 'ey-profile-group';
+    panel.id = `ey-profile-group-${profileGroupId}`;
+    panel.hidden = true;
+    if (h5.id) panel.setAttribute('aria-labelledby', h5.id);
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'ey-profile-group-tab';
+    tab.textContent = h5.textContent.trim();
+    tab.setAttribute('aria-expanded', 'false');
+    tab.setAttribute('aria-controls', panel.id);
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'ey-profile-group-close';
+    close.setAttribute('aria-label', `Close ${tab.textContent}`);
+    close.textContent = '\u00d7';
+    const bar = document.createElement('div');
+    bar.className = 'ey-profile-group-head';
+    bar.append(h5, close);
+    panel.append(bar, body);
+    head.remove();
+    tabs.append(tab);
+    groups.append(panel);
+    return { tab, panel, close };
+  });
+
+  const show = (target) => entries.forEach(({ tab, panel }) => {
+    panel.hidden = panel !== target;
+    tab.setAttribute('aria-expanded', String(panel === target));
+  });
+  entries.forEach(({ tab, panel, close }) => {
+    tab.addEventListener('click', () => show(panel.hidden ? panel : null));
+    close.addEventListener('click', () => {
+      show(null);
+      tab.focus();
+    });
+  });
+  groups.addEventListener('keydown', (e) => {
+    const open = entries.find(({ panel }) => !panel.hidden);
+    if (e.key === 'Escape' && open) {
+      show(null);
+      open.tab.focus();
+    }
+  });
+}
+
+/**
+ * Media blocks listing people.ey.com profiles get round photos; two or more consecutive
+ * "h5 + profile block" pairs become toggle groups (SharePoint leadership tabs).
+ * @param {Element} main The main element
+ */
+function decorateProfileGroups(main) {
+  main.querySelectorAll('.ey-tiles.media').forEach((block) => {
+    const links = [...block.querySelectorAll('a[href]')];
+    if (links.length && links.every((a) => /^https:\/\/people\.ey\.com\//i.test(a.href))) {
+      block.classList.add('profiles');
+    }
+  });
+
+  main.querySelectorAll('.section').forEach((section) => {
+    const children = [...section.children];
+    let run = [];
+    const flush = () => {
+      if (run.length > 1) buildProfileGroups(run);
+      run = [];
+    };
+    for (let i = 0; i < children.length; i += 1) {
+      const head = children[i];
+      const body = children[i + 1];
+      const h5 = head.classList.contains('default-content-wrapper') && head.children.length === 1
+        && head.querySelector(':scope > h5');
+      if (h5 && body?.querySelector(':scope > .ey-tiles.profiles')) {
+        run.push({ head, h5, body });
+        i += 1;
+      } else {
+        flush();
+      }
+    }
+    flush();
+  });
+}
+
+function isSlide(el) {
+  if (!el?.matches('p') || el.children.length !== 1 || el.textContent.trim()) return false;
+  const img = el.querySelector(':scope > picture > img');
+  const ratio = img && img.getAttribute('width') / img.getAttribute('height');
+  return ratio > 1.6 && ratio < 1.95;
+}
+
+/**
+ * Two or more consecutive "h5 + 16:9 slide image" pairs become a thumbnail grid
+ * (SharePoint DS_PAS strategy slides, enlarged on hover).
+ * @param {Element} main The main element
+ */
+function decorateSlideGrids(main) {
+  main.querySelectorAll('.default-content-wrapper').forEach((wrapper) => {
+    const children = [...wrapper.children];
+    let run = [];
+    const flush = () => {
+      if (run.length > 1) {
+        const grid = document.createElement('div');
+        grid.className = 'ey-slides';
+        run[0][0].before(grid);
+        run.forEach(([heading, frame]) => {
+          const slide = document.createElement('div');
+          slide.className = 'ey-slide';
+          frame.classList.add('ey-slide-frame');
+          frame.tabIndex = 0;
+          slide.append(heading, frame);
+          grid.append(slide);
+        });
+      }
+      run = [];
+    };
+    for (let i = 0; i < children.length; i += 1) {
+      if (children[i].tagName === 'H5' && isSlide(children[i + 1])) {
+        run.push([children[i], children[i + 1]]);
+        i += 1;
+      } else {
+        flush();
+      }
+    }
+    flush();
+  });
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -101,6 +239,8 @@ export function decorateMain(main) {
   // buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateProfileGroups(main);
+  decorateSlideGrids(main);
   decorateAssuranceHome(main);
 }
 
