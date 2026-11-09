@@ -66,6 +66,79 @@ function plainParagraphs(cell) {
   return wrap;
 }
 
+/**
+ * A tile description may start with a short italic teaser paragraph (<p><em>...</em></p>).
+ * Returns it so the bar variant can show it on hover (SharePoint overlay text).
+ */
+function findTeaser(cell) {
+  const p = cell && cell.querySelector(':scope > p');
+  if (!p || p.children.length !== 1 || p.firstElementChild.tagName !== 'EM') return null;
+  const text = textOf(p);
+  return text && text === textOf(p.firstElementChild) ? { p, text } : null;
+}
+
+/**
+ * Inside a reveal panel, two or more <h5> groups (heading + the content that follows it) become a
+ * vertical tab list with one pane per group (SharePoint "erf-tab" widget). Content before the first h5 stays above.
+ */
+function tabify(body) {
+  if ([...body.children].filter((el) => el.tagName === 'H5').length < 2) return;
+  const intro = [];
+  const groups = [];
+  [...body.childNodes].forEach((n) => {
+    if (n.nodeType === 1 && n.tagName === 'H5') groups.push({ title: n.textContent.trim(), nodes: [] });
+    else if (groups.length) groups[groups.length - 1].nodes.push(n);
+    else intro.push(n);
+  });
+  const wrap = document.createElement('div');
+  wrap.className = 'ey-tabs';
+  const list = document.createElement('div');
+  list.className = 'ey-tablist';
+  list.setAttribute('role', 'tablist');
+  list.setAttribute('aria-orientation', 'vertical');
+  const tabs = [];
+  const panes = [];
+  const select = (i, focus) => {
+    tabs.forEach((t, k) => {
+      t.setAttribute('aria-selected', k === i ? 'true' : 'false');
+      t.tabIndex = k === i ? 0 : -1;
+      panes[k].hidden = k !== i;
+    });
+    if (focus) tabs[i].focus();
+  };
+  groups.forEach((g, i) => {
+    uid += 1;
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'ey-tab';
+    tab.id = `ey-tab-${uid}`;
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-controls', `ey-tabpane-${uid}`);
+    tab.textContent = g.title;
+    const pane = document.createElement('div');
+    pane.className = 'ey-tabpane';
+    pane.id = `ey-tabpane-${uid}`;
+    pane.setAttribute('role', 'tabpanel');
+    pane.setAttribute('aria-labelledby', tab.id);
+    pane.append(...g.nodes);
+    tab.addEventListener('click', () => select(i));
+    tab.addEventListener('keydown', (e) => {
+      const keys = {
+        ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: groups.length - 1,
+      };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      select((keys[e.key] + groups.length) % groups.length, true);
+    });
+    tabs.push(tab);
+    panes.push(pane);
+    list.append(tab);
+  });
+  wrap.append(list, ...panes);
+  select(0);
+  body.replaceChildren(...intro, wrap);
+}
+
 function makeFace(item, opts) {
   const {
     link, reveal, panelId, wholeLink,
@@ -190,7 +263,13 @@ function buildTile(item, variant, reveal, panels) {
     const body = document.createElement('div');
     body.className = 'ey-tile-panel-body';
     // every cell after the title is panel content
+    const teaser = findTeaser(descCell);
+    if (teaser) {
+      face.dataset.teaser = teaser.text; // shown on tile hover (bar variant)
+      teaser.p.classList.add('ey-tile-teaser');
+    }
     texts.slice(1).forEach((c) => body.append(...c.childNodes));
+    tabify(body);
     panel.append(head, body);
     panels.push({ panel, face, close });
   }

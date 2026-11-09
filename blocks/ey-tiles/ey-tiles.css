@@ -446,14 +446,14 @@
   color: #000;
 }
 
-/* ---- bar, link-only (no reveal / no description): SharePoint `.buzz-sec` tiles (Indirect Tax "Service offerings")
+/* ---- bar (link tiles and reveal tiles): SharePoint `.buzz-sec` / `.erfsecitem` tiles (Indirect Tax "Service offerings", TT/BT resources)
    Spaced 172px picture tiles (30px columns, 8px rows) with a black caption bar at the bottom. On hover the
    caption jumps to the top and a yellow panel with "Click to know more." covers the picture. */
-.ey-tiles.bar:not(.reveal) ul.ey-tiles-list { gap: 8px 30px; }
-.ey-tiles.bar:not(.reveal) .ey-tile { height: 172px; border-right: 0; }
-.ey-tiles.bar:not(.reveal) .ey-tile-pic { bottom: 0; }
+.ey-tiles.bar ul.ey-tiles-list { gap: 8px 30px; }
+.ey-tiles.bar .ey-tile { height: 172px; border-right: 0; }
+.ey-tiles.bar .ey-tile-pic { bottom: 0; }
 
-.ey-tiles.bar:not(.reveal) .ey-tile-label {
+.ey-tiles.bar .ey-tile-label {
   top: auto;
   bottom: 0;
   z-index: 2;
@@ -467,7 +467,13 @@
   color: #fff;
 }
 
-.ey-tiles.bar:not(.reveal) .ey-tile-face::after {
+/* reveal tiles (TT / BT): taller tile, larger caption and overlay text, teaser hidden inside the opened panel */
+.ey-tiles.bar.reveal .ey-tile { height: 195px; }
+.ey-tiles.bar.reveal .ey-tile-label { min-height: 56px; font-size: 16px; line-height: 18px; }
+.ey-tiles.bar.reveal .ey-tile-face::after { padding-top: 56px; font-size: 16px; line-height: 20px; }
+.ey-tiles.bar .ey-tile-teaser { display: none; }
+
+.ey-tiles.bar .ey-tile-face::after {
   content: 'Click to know more.';
   position: absolute;
   inset: 0;
@@ -484,11 +490,15 @@
   pointer-events: none;
 }
 
-.ey-tiles.bar:not(.reveal) .ey-tile-face:hover::after,
-.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible::after { opacity: 1; }
+.ey-tiles.bar .ey-tile-face[data-teaser]::after { content: attr(data-teaser); text-align: center; }
 
-.ey-tiles.bar:not(.reveal) .ey-tile-face:hover .ey-tile-label,
-.ey-tiles.bar:not(.reveal) .ey-tile-face:focus-visible .ey-tile-label {
+.ey-tiles.bar .ey-tile-face:hover::after,
+.ey-tiles.bar .ey-tile-face:focus-visible::after,
+.ey-tiles.bar .ey-tile-face.active::after { opacity: 1; }
+
+.ey-tiles.bar .ey-tile-face:hover .ey-tile-label,
+.ey-tiles.bar .ey-tile-face:focus-visible .ey-tile-label,
+.ey-tiles.bar .ey-tile-face.active .ey-tile-label {
   top: 0;
   bottom: auto;
   background: #000;
@@ -1018,6 +1028,35 @@
 .ey-tiles.media.collage .ey-tile-desc ul { margin: 0; padding-left: 20px; }
 .ey-tiles.media.collage .ey-tile-desc li { margin: 0 0 5px; }
 
+/* ------------------------------------------------------- tabs inside a reveal panel */
+/* SharePoint "erf-tab": vertical tab list (grey, active = white with yellow left edge) + white content pane */
+.ey-tiles .ey-tabs { display: grid; grid-template-columns: 250px minmax(0, 1fr); margin: 10px 0; background: #ededed; }
+.ey-tiles .ey-tablist { display: flex; flex-direction: column; }
+.ey-tiles .ey-tab {
+  width: 100%;
+  min-height: 41px;
+  margin: 0;
+  padding: 10px 20px 10px 15px;
+  border: 0;
+  border-left: 5px solid transparent;
+  border-bottom: 1px solid #fff;
+  border-radius: 0;
+  background: #ededed;
+  color: #2e2e38;
+  font: inherit;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: left;
+  text-transform: none;
+  cursor: pointer;
+}
+.ey-tiles .ey-tab:hover { background: #e2e2e2; }
+.ey-tiles .ey-tab[aria-selected='true'] { background: #fff; border-left-color: var(--_yellow); }
+.ey-tiles .ey-tab:focus-visible { outline: 2px solid #2e2e38; outline-offset: -2px; }
+.ey-tiles .ey-tabpane { padding: 20px 25px; background: #fff; }
+.ey-tiles .ey-tabpane[hidden] { display: none; }
+.ey-tiles .ey-tabpane > :first-child { margin-top: 0; }
+
 /* --------------------------------------------------------------- responsive */
 /* Source breakpoints: bootstrap 991 / 767, erf-sec 720 / 600 (+550). Where the SharePoint web parts
    do not reflow at all on small screens (they just get clipped) the tiles go to 2 columns / 1 column. */
@@ -1027,6 +1066,9 @@
 }
 
 @media (max-width: 767px) {
+  .ey-tiles .ey-tabs { grid-template-columns: 1fr; }
+  .ey-tiles .ey-tablist { flex-direction: row; flex-wrap: wrap; }
+  .ey-tiles .ey-tab { width: auto; flex: 1 1 auto; }
   .ey-tiles.cards ul.ey-tiles-list,
   .ey-tiles.panels ul.ey-tiles-list,
   .ey-tiles.media ul.ey-tiles-list { grid-template-columns: 1fr; }
