@@ -1059,6 +1059,8 @@
 }
 .ey-tiles .ey-tab:hover { background: #e2e2e2; }
 .ey-tiles .ey-tab[aria-selected='true'] { background: #fff; border-left-color: var(--_yellow); }
+/* standalone tabs (ey-tiles tabs): the selected tab label is bold, as on SharePoint */
+.ey-tiles.tabs .ey-tab[aria-selected='true'] { font-family: var(--_bold); font-weight: 700; }
 .ey-tiles .ey-tab:focus-visible { outline: 2px solid #2e2e38; outline-offset: -2px; }
 .ey-tiles .ey-tabpane { padding: 20px 25px; background: #fff; }
 .ey-tiles .ey-tabpane[hidden] { display: none; }
