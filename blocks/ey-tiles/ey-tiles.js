@@ -81,15 +81,7 @@ function findTeaser(cell) {
  * Inside a reveal panel, two or more <h5> groups (heading + the content that follows it) become a
  * vertical tab list with one pane per group (SharePoint "erf-tab" widget). Content before the first h5 stays above.
  */
-function tabify(body) {
-  if ([...body.children].filter((el) => el.tagName === 'H5').length < 2) return;
-  const intro = [];
-  const groups = [];
-  [...body.childNodes].forEach((n) => {
-    if (n.nodeType === 1 && n.tagName === 'H5') groups.push({ title: n.textContent.trim(), nodes: [] });
-    else if (groups.length) groups[groups.length - 1].nodes.push(n);
-    else intro.push(n);
-  });
+function buildTabs(groups) {
   const wrap = document.createElement('div');
   wrap.className = 'ey-tabs';
   const list = document.createElement('div');
@@ -136,7 +128,32 @@ function tabify(body) {
   });
   wrap.append(list, ...panes);
   select(0);
-  body.replaceChildren(...intro, wrap);
+  return wrap;
+}
+
+function tabify(body) {
+  if ([...body.children].filter((el) => el.tagName === 'H5').length < 2) return;
+  const intro = [];
+  const groups = [];
+  [...body.childNodes].forEach((n) => {
+    if (n.nodeType === 1 && n.tagName === 'H5') groups.push({ title: n.textContent.trim(), nodes: [] });
+    else if (groups.length) groups[groups.length - 1].nodes.push(n);
+    else intro.push(n);
+  });
+  body.replaceChildren(...intro, buildTabs(groups));
+}
+
+/**
+ * Standalone tabs: `ey-tiles (tabs)`. One row per tab: first cell = tab title, remaining cells = tab content.
+ * Renders the same vertical tab list as the tabs inside a reveal panel (SharePoint erf-tab).
+ */
+function decorateTabs(block) {
+  const groups = [...block.children].map((row) => {
+    const cells = [...row.children];
+    return { title: textOf(cells[0]), nodes: cells.slice(1).flatMap((c) => [...c.childNodes]) };
+  }).filter((g) => g.title);
+  if (!groups.length) return;
+  block.replaceChildren(buildTabs(groups));
 }
 
 function makeFace(item, opts) {
@@ -337,6 +354,10 @@ function wireReveal(block, panels) {
 }
 
 export default function decorate(block) {
+  if (block.classList.contains('tabs')) {
+    decorateTabs(block);
+    return;
+  }
   const known = ['cards', 'flip', 'buttons', 'image', 'tab', 'bar', 'slide', 'overlay', 'box', 'panorama', 'panels', 'media', 'wheel'];
   let variant = known.find((v) => block.classList.contains(v));
   if (!variant) {

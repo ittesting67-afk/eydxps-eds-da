@@ -1048,6 +1048,10 @@
   line-height: 20px;
   text-align: left;
   text-transform: none;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 .ey-tiles .ey-tab:hover { background: #e2e2e2; }
@@ -1056,6 +1060,7 @@
 .ey-tiles .ey-tabpane { padding: 20px 25px; background: #fff; }
 .ey-tiles .ey-tabpane[hidden] { display: none; }
 .ey-tiles .ey-tabpane > :first-child { margin-top: 0; }
+.ey-tiles.tabs { margin: 15px 0; }
 
 /* --------------------------------------------------------------- responsive */
 /* Source breakpoints: bootstrap 991 / 767, erf-sec 720 / 600 (+550). Where the SharePoint web parts
