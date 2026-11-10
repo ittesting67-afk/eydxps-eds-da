@@ -473,6 +473,9 @@
 .ey-tiles.bar.reveal .ey-tile-face::after { padding-top: 56px; font-size: 16px; line-height: 20px; }
 .ey-tiles.bar .ey-tile-teaser { display: none; }
 
+/* yellow caption text at rest (SharePoint DS_MS: black bar, bold yellow text); hover/open state unchanged */
+.ey-tiles.bar.yellow-caption .ey-tile-label { color: var(--_yellow); }
+
 .ey-tiles.bar .ey-tile-face::after {
   content: 'Click to know more.';
   position: absolute;
