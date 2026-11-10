@@ -554,3 +554,22 @@
   padding: 15px;
   background: #fff;
 }
+
+/* right rail typography, matched to the SharePoint web parts (GCR comparison, 2026-11-10) */
+.ey-aside .ey-content-list.rail .ey-cl-title {
+  font-size: 13px;
+  line-height: 18.57px;
+}
+
+.ey-aside .ey-content-list.events .ey-cl-top-link:any-link {
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.ey-aside .ey-content-list.events .ey-cl-title {
+  margin: 0 0 7px;
+  font-family: var(--ey-font, 'NotoSans-Regular', Arial, sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+}
