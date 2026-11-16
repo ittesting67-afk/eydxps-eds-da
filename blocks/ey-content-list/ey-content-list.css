@@ -558,8 +558,10 @@
 /* right rail typography, matched to the SharePoint web parts (GCR comparison, 2026-11-10) */
 .ey-aside .ey-content-list.rail .ey-cl-title {
   font-size: 13px;
-  line-height: 18.57px;
+  line-height: 20px;
 }
+
+.ey-aside .ey-content-list.rail .ey-cl-title a { line-height: inherit; }
 
 .ey-aside .ey-content-list.events .ey-cl-top-link:any-link {
   font-size: 11px;
