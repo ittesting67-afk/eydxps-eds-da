@@ -901,6 +901,9 @@ html body footer .section:first-of-type a[href^='mailto:']::before {
 /* legal text */
 html body footer .section:nth-of-type(2) {
   background: transparent;
+
+  /* footer.css forces p/a to --footer-font-color (white) with !important; dark text like SharePoint .footerDisclaimer */
+  --footer-font-color: var(--ey-text);
 }
 
 html body footer .section:nth-of-type(2) p {
@@ -911,6 +914,7 @@ html body footer .section:nth-of-type(2) p {
 }
 
 html body footer .section:nth-of-type(2) a:any-link {
+  color: #32679b !important;
   text-decoration: underline;
 }
 
